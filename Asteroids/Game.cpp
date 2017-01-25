@@ -68,6 +68,7 @@ void Game::processEvents()
 			m_hub.processEvents(event);
 			break;
 		case GameState::Map:
+			m_map.processEvents(event);
 			break;
 		case GameState::Hanger:
 			break;
@@ -102,6 +103,7 @@ void Game::update(sf::Time time)
 		m_hub.update(time, m_window);
 		break;
 	case GameState::Map:
+		m_map.update(time, m_window);
 		break;
 	case GameState::Hanger:
 		break;
@@ -138,6 +140,7 @@ void Game::render()
 		m_hub.render(m_window);
 		break;
 	case GameState::Map:
+		m_map.render(m_window);
 		break;
 	case GameState::Hanger:
 		break;

@@ -6,7 +6,7 @@ void setupText(sf::Font &font, sf::Text &text, std::string string, sf::Vector2f 
 
 Hub::Hub()
 {
-	if (!m_backgroundTexture.loadFromFile("ASSETS\\IMAGES\\menu.PNG"))
+	if (!m_backgroundTexture.loadFromFile("ASSETS\\IMAGES\\menu.jpg"))
 	{
 		std::cout << "problem with menu" << std::endl;
 	}

@@ -5,7 +5,7 @@
 
 Splash::Splash()
 {
-	if (!m_backgroundTexture.loadFromFile("ASSETS\\IMAGES\\SPLASH.PNG"))
+	if (!m_backgroundTexture.loadFromFile("ASSETS\\IMAGES\\SPLASH.jpg"))
 	{
 		std::cout << "problem with splash" << std::endl;
 	}

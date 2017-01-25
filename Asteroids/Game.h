@@ -6,6 +6,7 @@
 #include "Logo.h"
 #include "Splash.h"
 #include "Hub.h"
+#include "Map.h"
 
 
 enum class  
@@ -51,6 +52,7 @@ private:
 	Logo m_logo; // logo screen
 	Splash m_splash;
 	Hub m_hub;
+	Map m_map;
 	sf::Font m_font; // nasa font
 };
 
