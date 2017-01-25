@@ -22,7 +22,7 @@ void Logo::render(sf::RenderWindow & window)
 void Logo::update(sf::Time deltaTime)
 {
 	m_delayTimer += deltaTime;
-	if (m_delayTimer.asSeconds() > 2.5)
+	if (m_delayTimer.asSeconds() > 0.1)
 	{
 		Game::s_currentGameState = GameState::Splash;
 	}
