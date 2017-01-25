@@ -99,7 +99,7 @@ void Game::update(sf::Time time)
 	case GameState::Start:
 		break;
 	case GameState::Hub:
-		m_hub.update(time);
+		m_hub.update(time, m_window);
 		break;
 	case GameState::Map:
 		break;

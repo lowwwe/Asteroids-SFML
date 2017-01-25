@@ -17,7 +17,7 @@ public:
 	Hub();
 	~Hub();
 	void render(sf::RenderWindow &window);
-	void update(sf::Time deltaTime);
+	void update(sf::Time deltaTime, sf::RenderWindow &window);
 	void processEvents(sf::Event event);
 	void initialise(sf::Font & font);
 private:
