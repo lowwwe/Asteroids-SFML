@@ -7,7 +7,16 @@
 #include "Splash.h"
 #include "Hub.h"
 #include "Map.h"
+#include <string.h>
 
+struct Planet
+{
+	std::string name;
+	double minerals[5];
+	double pirates;
+	sf::IntRect location;
+	bool active;
+};
 
 enum class  
 	GameState   {
@@ -41,6 +50,7 @@ public:
 	~Game();
 	void run();
 	static GameState s_currentGameState; // current mode
+	static Planet g_planets[];
 private:
 	void render();
 	void processEvents();
@@ -55,5 +65,9 @@ private:
 	Map m_map;
 	sf::Font m_font; // nasa font
 };
+
+
+
+
 
 #endif // !GAME

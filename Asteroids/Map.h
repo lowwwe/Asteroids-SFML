@@ -1,7 +1,7 @@
 #ifndef MAP
 #define MAP
 #include <SFML\Graphics.hpp>
-#include "Planet.h"
+
 
 
 
@@ -17,7 +17,7 @@ public:
 private:
 	static const int maxPlanets = 9;
 	//Planet pete{ static_cast<std::string>("Moon"), 0.0, 0.1, 0.1, 0.0, 0.0, 0.9, sf::IntRect{ 534,41,30,25 } };
-	Planet m_planets[maxPlanets]{
+	/*Planet m_planets[maxPlanets]{
 		{ static_cast<std::string>("Moon"),		 0.0, 0.1, 0.1, 0.0, 0.0, 0.9, sf::IntRect{ 534,41,30,25 } },
 		{ static_cast<std::string>("Venus"),	 0.2, 0.2, 0.0, 0.0, 0.0, 0.1, sf::IntRect{ 250, 10, 30, 50 }},
 	{ static_cast<std::string>("Mercury"),		 0.5, 0.1, 0.0, 0.0, 0.0, 0.5, sf::IntRect{ 280, 20, 80, 80 } },
@@ -29,11 +29,21 @@ private:
 	{ static_cast<std::string>("neptune"),		 0.1, 0.0, 0.0, 0.4, 0.5, 0.9, sf::IntRect{ 360, 427, 130, 121 } },
 	{ static_cast<std::string>("uranus"),		 0.0, 0.0, 0.0, 0.2, 0.5, 0.4, sf::IntRect{ 133, 400, 200, 200 } },
 	};
-
+	*/
 	sf::Texture m_backgroundTexture;
 	sf::Sprite m_backgroundSprite;
 	sf::Texture m_planetTextures[maxPlanets];
 	sf::Sprite m_planetSprites[maxPlanets];
+	sf::Texture m_gemsTexture;
+	sf::Sprite m_gemsSprite;
+	sf::Texture m_menuTexture;
+	sf::Sprite m_menuSprite;
+	sf::Font m_font;
+	sf::Text m_planetName;
+	sf::Text m_pirates;
+	sf::Text m_gemProbability;
+
+
 	bool m_mouseClick;
 	int m_currentPlanet;
 };

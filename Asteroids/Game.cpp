@@ -3,7 +3,34 @@
 
 
 GameState Game::s_currentGameState = GameState::Logo;
+Planet Game::g_planets[] = {
+	{ "Moon",{ 0.0, 0.1, 0.1, 0.0, 0.0 }, 0.9, sf::IntRect{ 534,41,30,25 } ,false },
+	{ "Venus",{ 0.2, 0.2, 0.0, 0.0, 0.0 }, 0.1, sf::IntRect{ 250, 10, 30, 50 }, true },
+	{ "Mercury",{ 0.5, 0.1, 0.0, 0.0, 0.0 }, 0.5, sf::IntRect{ 280, 20, 80, 80 } , true },
+	{ "Earth",{ 0.15, 0.15, 0.15, 0.4, 0.0 }, 0.2, sf::IntRect{ 370, 45, 120, 90 }, true },
+	{ "Mars",{ 0.1, 0.8, 0.0, 0.0, 0.0 }, 0.3, sf::IntRect{ 506, 130, 100, 60 }, false },
+	{ "Jupiter",{ 0.1, 0.1, 0.1, 0.1, 0.1 }, 0.4, sf::IntRect{ 530, 240, 200, 200 }, false },
+	{ "Saturn",{ 0.2, 0.2, 0.2, 0.2, 0.2 }, 0.8, sf::IntRect{ 406, 331, 150, 120 } , false },
+	{ "neptune",{ 0.1, 0.0, 0.0, 0.4, 0.5 }, 0.9, sf::IntRect{ 360, 427, 130, 121 } , false },
+	{ "uranus",{ 0.0, 0.0, 0.0, 0.2, 0.5 }, 0.4, sf::IntRect{ 133, 400, 200, 200 } ,false }
 
+
+};
+
+
+/*
+Planet m_planets[maxPlanets]{
+	{ static_cast<std::string>("Moon"),		 0.0, 0.1, 0.1, 0.0, 0.0, 0.9, sf::IntRect{ 534,41,30,25 } },
+	{ static_cast<std::string>("Venus"),	 0.2, 0.2, 0.0, 0.0, 0.0, 0.1, sf::IntRect{ 250, 10, 30, 50 } },
+	{ static_cast<std::string>("Mercury"),		 0.5, 0.1, 0.0, 0.0, 0.0, 0.5, sf::IntRect{ 280, 20, 80, 80 } },
+	{ static_cast<std::string>("Earth"),		 0.15, 0.15, 0.15, 0.4, 0.0, 0.2, sf::IntRect{ 370, 45, 120, 90 } },
+
+	{ static_cast<std::string>("Mars"),		 0.1, 0.8, 0.0, 0.0, 0.0, 0.3, sf::IntRect{ 506, 130, 100, 60 } },
+	{ static_cast<std::string>("Jupiter"),		 0.1, 0.1, 0.1, 0.1, 0.1, 0.4, sf::IntRect{ 530, 240, 200, 200 } },
+	{ static_cast<std::string>("Saturn"),		 0.2, 0.2, 0.2, 0.2, 0.2, 0.8, sf::IntRect{ 406, 331, 150, 120 } },
+	{ static_cast<std::string>("neptune"),		 0.1, 0.0, 0.0, 0.4, 0.5, 0.9, sf::IntRect{ 360, 427, 130, 121 } },
+	{ static_cast<std::string>("uranus"),		 0.0, 0.0, 0.0, 0.2, 0.5, 0.4, sf::IntRect{ 133, 400, 200, 200 } },
+};*/
 Game::Game() :
 	m_window(sf::VideoMode(800, 600), "Asteroids")
 	
@@ -14,12 +41,13 @@ Game::Game() :
 	}
 	m_logo.initialise(m_font);
 	m_hub.initialise(m_font);
+	m_map.initialise(m_font);
 	if (!m_menuMusic.openFromFile("ASSETS\\AUDIO\\MENULOOP.WAV"))
 	{
 		std::cout << "Problem with menu musoic" << std::endl;
 	}
 	m_menuMusic.setLoop(true);
-	m_menuMusic.play();
+	m_menuMusic.play();	
 }
 
 
