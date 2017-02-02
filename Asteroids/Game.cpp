@@ -42,7 +42,7 @@ Game::Game() :
 	m_logo.initialise(m_font);
 	m_hub.initialise(m_font);
 	m_map.initialise(m_font);
-	if (!m_menuMusic.openFromFile("ASSETS\\AUDIO\\MENULOOP.WAV"))
+	if (!m_menuMusic.openFromFile("ASSETS\\AUDIO\\menumusic.ogg"))
 	{
 		std::cout << "Problem with menu musoic" << std::endl;
 	}
