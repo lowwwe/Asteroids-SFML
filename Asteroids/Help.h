@@ -18,6 +18,8 @@ private:
 	void setupText(sf::Text &t_text, std::string t_string, sf::Vector2f t_position);
 	sf::Texture m_backgroundTexture;
 	sf::Sprite m_backgroundSprite;	
+	sf::Texture m_menuIconTexture;
+	sf::Sprite m_menuIconSprite;
 	sf::Font m_font;
 	int m_curretnPage = 0;
 	sf::Text m_titleText;
