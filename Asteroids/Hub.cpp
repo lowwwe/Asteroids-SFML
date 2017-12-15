@@ -31,10 +31,10 @@ void Hub::render(sf::RenderWindow & window)
 void Hub::update(sf::Time deltaTime, sf::RenderWindow &window)
 {
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-	m_mapText.setColor(sf::Color::White);
-	m_hangerText.setColor(sf::Color::White);
-	m_marketText.setColor(sf::Color::White);
-	m_helpText.setColor(sf::Color::White);
+	m_mapText.setFillColor(sf::Color::White);
+	m_hangerText.setFillColor(sf::Color::White);
+	m_marketText.setFillColor(sf::Color::White);
+	m_helpText.setFillColor(sf::Color::White);
 	m_currentRegion = HubRegion::None;
 	if (mousePosition.y < 400)
 	{
@@ -42,12 +42,12 @@ void Hub::update(sf::Time deltaTime, sf::RenderWindow &window)
 		{
 			if (mousePosition.y > 200)
 			{
-				m_helpText.setColor(sf::Color::Yellow);
+				m_helpText.setFillColor(sf::Color::Yellow);
 				m_currentRegion = HubRegion::Help;
 			}
 			else
 			{
-				m_hangerText.setColor(sf::Color::Yellow);
+				m_hangerText.setFillColor(sf::Color::Yellow);
 				m_currentRegion = HubRegion::Hanger;
 			}
 		}
@@ -55,12 +55,12 @@ void Hub::update(sf::Time deltaTime, sf::RenderWindow &window)
 		{
 			if (mousePosition.y > 200)
 			{
-				m_marketText.setColor(sf::Color::Yellow);
+				m_marketText.setFillColor(sf::Color::Yellow);
 				m_currentRegion = HubRegion::Market;
 			}
 			else
 			{
-				m_mapText.setColor(sf::Color::Yellow);
+				m_mapText.setFillColor(sf::Color::Yellow);
 				m_currentRegion = HubRegion::Map;
 			}
 		}
@@ -102,6 +102,6 @@ void setupText(sf::Font &font, sf::Text &text, std::string string, sf::Vector2f 
 	text.setFont(font);
 	text.setCharacterSize(24);
 	text.setString(string);
-	text.setColor(sf::Color::White);
+	text.setFillColor(sf::Color::White);
 	text.setPosition(position);
 }

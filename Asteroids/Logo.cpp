@@ -38,7 +38,7 @@ void Logo::initialise(sf::Font & font)
 	m_liceince.setFont(font);
 	m_liceince.setString("HameMade by Pete");
 	m_liceince.setCharacterSize(24);
-	m_liceince.setColor(sf::Color::White);
+	m_liceince.setFillColor(sf::Color::White);
 
 	sf::FloatRect textSize = m_liceince.getGlobalBounds();
 	float xPosition = 400 - textSize.width / 2;

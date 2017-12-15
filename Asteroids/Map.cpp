@@ -64,20 +64,20 @@ void Map::render(sf::RenderWindow & window)
 		{
 			colour = sf::Color::Yellow;
 		}
-		m_pirates.setColor(colour);
-		m_planetName.setColor(colour);
-		m_gemProbability.setColor(colour);
+		m_pirates.setFillColor(colour);
+		m_planetName.setFillColor(colour);
+		m_gemProbability.setFillColor(colour);
 		for (int i = 0; i < 5; i++)
 		{
 			m_gemsSprite.setTextureRect({ i * 32,0,32,32 });
 			m_gemsSprite.setPosition({ 50.0f,140.0f + i * 40 });
 			window.draw(m_gemsSprite);
-			int gem = Game::g_planets[m_currentPlanet].minerals[i] * 100.0;
+			int gem =static_cast<int>( Game::g_planets[m_currentPlanet].minerals[i] * 100.0);
 			m_gemProbability.setString(": " + std::to_string(gem) + "%");
 			m_gemProbability.setPosition({ 90.0f,140.0f + i * 40 });
 			window.draw(m_gemProbability);
 		}
-		int pirates = Game::g_planets[m_currentPlanet].pirates * 100.0;
+		int pirates = static_cast<int>(Game::g_planets[m_currentPlanet].pirates * 100.0);
 		m_pirates.setString("Pirates : " + std::to_string(pirates) + "%");
 		m_planetName.setString(Game::g_planets[m_currentPlanet].name);
 		window.draw(m_planetName);
@@ -129,13 +129,13 @@ void Map::initialise(sf::Font & font)
 	m_font = font;
 	m_pirates.setFont(m_font);
 	m_pirates.setCharacterSize(18);
-	m_pirates.setColor(sf::Color::Yellow);
+	m_pirates.setFillColor(sf::Color::Yellow);
 	m_pirates.setPosition({ 50,350 });
 	
 	m_planetName.setFont(m_font);
 	m_planetName.setCharacterSize(24);
 	m_planetName.setPosition({ 50,100 });
-	m_planetName.setColor(sf::Color::Yellow);
+	m_planetName.setFillColor(sf::Color::Yellow);
 	m_gemProbability.setFont(m_font);
 	m_gemProbability.setCharacterSize(18);
 
