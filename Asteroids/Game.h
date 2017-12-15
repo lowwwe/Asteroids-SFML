@@ -7,6 +7,7 @@
 #include "Splash.h"
 #include "Hub.h"
 #include "Map.h"
+#include "Help.h"
 #include <string.h>
 
 struct Planet
@@ -63,6 +64,7 @@ private:
 	Splash m_splash;
 	Hub m_hub;
 	Map m_map;
+	Help m_help;
 	sf::Font m_font; // nasa font
 };
 

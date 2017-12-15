@@ -21,6 +21,8 @@ public:
 	void processEvents(sf::Event event);
 	void initialise(sf::Font & font);
 private:
+	void  setupText(sf::Text &text, std::string string, sf::Vector2f position);
+
 	sf::Texture m_backgroundTexture;
 	sf::Sprite m_backgroundSprite;
 	HubRegion m_currentRegion; // currently highlighted region
@@ -29,7 +31,7 @@ private:
 	sf::Text m_hangerText;
 	sf::Text m_marketText;
 	sf::Text m_helpText;
-
+	
 };
 
 #endif // !HUB

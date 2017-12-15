@@ -42,6 +42,7 @@ Game::Game() :
 	m_logo.initialise(m_font);
 	m_hub.initialise(m_font);
 	m_map.initialise(m_font);
+	m_help.initialise(m_font);
 	if (!m_menuMusic.openFromFile("ASSETS\\AUDIO\\menumusic.ogg"))
 	{
 		std::cout << "Problem with menu musoic" << std::endl;
@@ -107,6 +108,7 @@ void Game::processEvents()
 		case GameState::Game:
 			break;
 		case GameState::Help:
+			m_help.processEvents(event);
 			break;
 		case GameState::Over:
 			break;
@@ -142,6 +144,7 @@ void Game::update(sf::Time time)
 	case GameState::Game:
 		break;
 	case GameState::Help:
+		m_help.update(time, m_window);
 		break;
 	case GameState::Over:
 		break;
@@ -179,6 +182,7 @@ void Game::render()
 	case GameState::Game:
 		break;
 	case GameState::Help:
+		m_help.render(m_window);
 		break;
 	case GameState::Over:
 		break;

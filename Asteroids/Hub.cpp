@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Game.h"
 
-void setupText(sf::Font &font, sf::Text &text, std::string string, sf::Vector2f position);
+
 
 Hub::Hub()
 {
@@ -92,14 +92,14 @@ void Hub::processEvents(sf::Event event)
 void Hub::initialise(sf::Font & font)
 {
 	m_font = font;
-	setupText(font, m_mapText, "MAP", { 150,100 });
-	setupText(font, m_hangerText, "HANGER", { 500,100 });
-	setupText(font, m_marketText, "MARKET", { 150,300 });
-	setupText(font, m_helpText, "HELP", { 500,300 });
+	setupText(m_mapText, "MAP", { 150,100 });
+	setupText(m_hangerText, "HANGER", { 500,100 });
+	setupText(m_marketText, "MARKET", { 150,300 });
+	setupText(m_helpText, "HELP", { 500,300 });
 }
-void setupText(sf::Font &font, sf::Text &text, std::string string, sf::Vector2f position)
+void  Hub::setupText(sf::Text &text, std::string string, sf::Vector2f position)
 {
-	text.setFont(font);
+	text.setFont(m_font);
 	text.setCharacterSize(24);
 	text.setString(string);
 	text.setFillColor(sf::Color::White);
