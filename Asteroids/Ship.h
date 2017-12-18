@@ -16,7 +16,7 @@ public:
 	void accelerate();
 	void update(sf::Time t_delta);
 	void friction();
-	void screenWrap();
+	
 	bool m_enginePowerOn{ false };
 
 private:
@@ -33,6 +33,8 @@ private:
 	float m_engineFrameIncrement = 0.5f;
 	float m_dragCoefficient = 0.995f;
 	int m_maxEngineFrame = 6;
+	
+	void screenWrap();
 	void engineFrame();
 	
 

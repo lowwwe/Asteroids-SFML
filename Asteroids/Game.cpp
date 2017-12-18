@@ -17,6 +17,7 @@ Planet Game::g_planets[] = {
 
 
 };
+int Game::s_currentPlanet = -1;
 
 
 /*

@@ -60,6 +60,7 @@ public:
 	void run();
 	static GameState s_currentGameState; // current mode
 	static Planet g_planets[];
+	static int s_currentPlanet;
 	static Music s_music;
 	
 private:

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="Help.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="Splash.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GamePlay.h" />
     <ClInclude Include="Help.h" />

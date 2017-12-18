@@ -96,21 +96,21 @@ void Ship::friction()
 
 void Ship::screenWrap()
 {
-	if (m_location.y < -64)
+	if (m_location.y < -32)
 	{
-		m_location.y = 640;
+		m_location.y = 672;
 	}
-	if (m_location.y  > 640)
+	if (m_location.y  > 672)
 	{
-		m_location.y = -64;
+		m_location.y = -32;
 	}
-	if (m_location.x < -64)
+	if (m_location.x < -32)
 	{
-		m_location.x = 800;
+		m_location.x = 832;
 	}
-	if (m_location.x > 800)
+	if (m_location.x > 832)
 	{
-		m_location.x = -64;
+		m_location.x = -32;
 	}
 }
 

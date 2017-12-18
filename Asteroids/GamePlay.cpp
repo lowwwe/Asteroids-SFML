@@ -26,7 +26,12 @@ GamePlay::GamePlay()
 	m_engineSound.setBuffer(m_engineSoundBuffer);
 	m_engineSound.setLoop(true);
 	m_engineSound.stop();
-
+	if (!m_asteroidBreakSoundBuffer.loadFromFile("assets\\audio\\Asteroid breaking.wav"))
+	{
+		std::cout << "problem loading asteroid sound" << std::endl;
+	}
+	m_asteroidBreakSound.setBuffer(m_asteroidBreakSoundBuffer);
+	m_asteroidBreakSound.play(); 
 }
 
 
@@ -104,4 +109,8 @@ void GamePlay::processEvents(sf::Event t_event)
 void GamePlay::initialise(sf::Font & t_font)
 {
 	
+}
+
+void GamePlay::setupLevel()
+{
 }
