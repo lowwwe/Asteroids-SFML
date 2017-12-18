@@ -20,19 +20,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="Help.cpp" />
     <ClCompile Include="Hub.cpp" />
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MyVector2D.cpp" />
+    <ClCompile Include="Ship.cpp" />
     <ClCompile Include="Splash.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GamePlay.h" />
     <ClInclude Include="Help.h" />
     <ClInclude Include="Hub.h" />
     <ClInclude Include="Logo.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MyVector2D.h" />
+    <ClInclude Include="Ship.h" />
     <ClInclude Include="Splash.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
