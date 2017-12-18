@@ -8,6 +8,7 @@
 #include "Hub.h"
 #include "Map.h"
 #include "Help.h"
+#include "Market.h"
 #include <string.h>
 
 struct Planet
@@ -65,6 +66,7 @@ private:
 	Hub m_hub;
 	Map m_map;
 	Help m_help;
+	Market m_market;
 	sf::Font m_font; // nasa font
 };
 

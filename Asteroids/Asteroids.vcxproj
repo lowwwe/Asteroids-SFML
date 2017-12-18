@@ -25,6 +25,7 @@
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Market.cpp" />
     <ClCompile Include="Splash.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +34,7 @@
     <ClInclude Include="Hub.h" />
     <ClInclude Include="Logo.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Market.h" />
     <ClInclude Include="Splash.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
