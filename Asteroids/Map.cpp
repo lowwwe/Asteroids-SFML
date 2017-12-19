@@ -108,6 +108,7 @@ void Map::update(sf::Time deltaTime, sf::RenderWindow & window)
 		if (Game::s_currentPlanet != -1 && Game::g_planets[Game::s_currentPlanet].active)
 		{
 			//setupPlanet(m_currentPlanet);
+			Game::s_gameplay.setupLevel(Game::s_currentPlanet);
 			Game::s_currentGameState = GameState::Game;
 			Game::s_music = Music::Level;
 			//intitialiseLevel(m_currentPlanet;)

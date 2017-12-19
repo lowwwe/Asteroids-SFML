@@ -5,6 +5,7 @@
 #include "Ship.h"
 #include "Asteroid.h"
 
+const int MAX_ASTEROIDS = 20;
 class GamePlay
 {
 public:
@@ -14,11 +15,11 @@ public:
 	void update(sf::Time t_deltaTime);
 	void processEvents(sf::Event t_event);
 	void initialise(sf::Font & t_font);
-	static void setupLevel();
+	void setupLevel(int t_levelNo);
 private:
 	
 	Ship m_ship;
-	Asteroid m_asteroids[20];
+	Asteroid m_asteroids[MAX_ASTEROIDS];
 	sf::Sprite m_shipSprite;
 	sf::SoundBuffer m_laserSoundBuffer;
 	sf::Sound m_laserSound;

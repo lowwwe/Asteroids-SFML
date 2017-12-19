@@ -62,7 +62,8 @@ public:
 	static Planet g_planets[];
 	static int s_currentPlanet;
 	static Music s_music;
-	
+	static GamePlay s_gameplay;
+
 private:
 	void render();
 	void processEvents();
@@ -78,7 +79,7 @@ private:
 	Hub m_hub;
 	Map m_map;
 	Help m_help;
-	GamePlay m_gameplay;
+	
 	sf::Font m_font; // nasa font
 	Music m_currentMusic = Music::Menu;
 	sf::Music m_levelmusic;

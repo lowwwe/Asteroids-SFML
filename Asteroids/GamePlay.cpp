@@ -2,6 +2,7 @@
 #include <iostream>
 
 
+
 GamePlay::GamePlay()
 {
 	if (!m_laserSoundBuffer.loadFromFile("assets\\audio\\laser.wav"))
@@ -42,6 +43,10 @@ GamePlay::~GamePlay()
 void GamePlay::render(sf::RenderWindow & t_window)
 {
 	m_ship.render(t_window);
+	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
+	{
+		m_asteroids[i].render(t_window);
+	}
 }
 
 void GamePlay::update(sf::Time t_deltaTime)
@@ -60,6 +65,10 @@ void GamePlay::update(sf::Time t_deltaTime)
 		m_ship.m_enginePowerOn = true;
 	}
 	m_ship.update(t_deltaTime);
+	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
+	{
+		m_asteroids[i].update(t_deltaTime);
+	}
 }
 
 void GamePlay::processEvents(sf::Event t_event)
@@ -111,6 +120,20 @@ void GamePlay::initialise(sf::Font & t_font)
 	
 }
 
-void GamePlay::setupLevel()
+void GamePlay::setupLevel(int t_levelNo)
 {
+	m_ship.reset();
+	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
+	{
+		m_asteroids[i].m_active = false;
+	}
+	int asteroidCount;
+	asteroidCount = (t_levelNo < 2) ? 2 : t_levelNo;
+	for (int i = 0; i < asteroidCount; i++)
+	{
+		m_asteroids[i].reStart(i);
+	}
+	// add pirates
+	// do crystals
+	// do explosions
 }
