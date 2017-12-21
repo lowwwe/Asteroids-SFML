@@ -3,6 +3,7 @@
 
 
 
+
 GamePlay::GamePlay()
 {
 	if (!m_laserSoundBuffer.loadFromFile("assets\\audio\\laser.wav"))
@@ -33,6 +34,10 @@ GamePlay::GamePlay()
 	}
 	m_asteroidBreakSound.setBuffer(m_asteroidBreakSoundBuffer);
 	m_asteroidBreakSound.play(); 
+	if (!Bullet::s_bulletTexture.loadFromFile("assets\\images\\bullet16.png"))
+	{
+		std::cout << "problem loading bullet texture" << std::endl;
+	}
 }
 
 
@@ -47,6 +52,12 @@ void GamePlay::render(sf::RenderWindow & t_window)
 	{
 		m_asteroids[i].render(t_window);
 	}
+	for (size_t i = 0; i < MAX_BULLETS; i++)
+	{
+		m_bullets[i].render(t_window);
+	}
+	m_bullets[0].render(t_window);
+	
 }
 
 void GamePlay::update(sf::Time t_deltaTime)
@@ -64,10 +75,19 @@ void GamePlay::update(sf::Time t_deltaTime)
 		m_ship.accelerate();	
 		m_ship.m_enginePowerOn = true;
 	}
+	if (m_fire)
+	{
+		fireBullet();
+		m_fire = false;
+	}
 	m_ship.update(t_deltaTime);
 	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
 	{
 		m_asteroids[i].update(t_deltaTime);
+	}
+	for (size_t i = 0; i < MAX_BULLETS; i++)
+	{
+		m_bullets[i].update(t_deltaTime);
 	}
 }
 
@@ -93,6 +113,10 @@ void GamePlay::processEvents(sf::Event t_event)
 				m_engineSound.play();
 				std::cout << "play engine" << std::endl;
 			}
+		}
+		if (sf::Keyboard::LControl == t_event.key.code || sf::Keyboard::RControl == t_event.key.code)
+		{
+			m_fire = true; 			
 		}
 	}
 	if (sf::Event::KeyReleased == t_event.type)
@@ -136,4 +160,21 @@ void GamePlay::setupLevel(int t_levelNo)
 	// add pirates
 	// do crystals
 	// do explosions
+}
+
+void GamePlay::fireBullet()
+{
+	int i{ 0 };
+	bool found{ false };
+	while( !found && i < MAX_BULLETS)
+	{
+		if (!m_bullets[i].m_alive)
+		{
+			found = true;
+			float xBit = std::cos(m_ship.m_heading /180.0f * PI_F);
+			float yBit = std::sin(m_ship.m_heading / 180.0f * PI_F);
+			m_bullets[i].reStart(1, m_ship.m_location, MyVector2D{ xBit,yBit }, m_ship.m_heading);
+		}
+		++i;
+	}
 }

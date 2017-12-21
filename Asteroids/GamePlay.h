@@ -4,8 +4,10 @@
 #include <SFML\Audio.hpp>
 #include "Ship.h"
 #include "Asteroid.h"
+#include "Bullet.h"
 
 const int MAX_ASTEROIDS = 20;
+
 class GamePlay
 {
 public:
@@ -20,6 +22,7 @@ private:
 	
 	Ship m_ship;
 	Asteroid m_asteroids[MAX_ASTEROIDS];
+	Bullet m_bullets[MAX_BULLETS];
 	sf::Sprite m_shipSprite;
 	sf::SoundBuffer m_laserSoundBuffer;
 	sf::Sound m_laserSound;
@@ -34,6 +37,9 @@ private:
 	bool m_shipTrunRight{ false };
 	bool m_shipTrunLeft{ false };
 	bool m_shipAccelerate{ false };
+	bool m_fire{ false };
+
+	void fireBullet();
 	
 };
 

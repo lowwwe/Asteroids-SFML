@@ -57,6 +57,7 @@ Game::Game() :
 	{
 		std::cout << "Problem with menu musoic" << std::endl;
 	}
+
 	m_levelmusic.setLoop(true);
 	m_levelmusic.setVolume(1.0f);
 	

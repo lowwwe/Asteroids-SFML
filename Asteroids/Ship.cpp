@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-const float  PI_F = 3.14159265358979f;
+
 
 Ship::Ship()
 {
