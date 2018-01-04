@@ -3,7 +3,7 @@
 #include <SFML\Graphics.hpp>
 #include "MyVector2D.h"
 
-const float  PI_F = 3.14159265358979f;
+const float  PI_F = 3.14159265358979f; 
 
 class Ship
 {
