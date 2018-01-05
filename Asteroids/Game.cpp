@@ -46,6 +46,7 @@ Game::Game() :
 	m_hub.initialise(m_font);
 	m_map.initialise(m_font);
 	m_help.initialise(m_font);
+	m_market.initialise(m_font);
 	s_gameplay.initialise(m_font);
 	if (!m_menuMusic.openFromFile("ASSETS\\AUDIO\\menumusic.ogg"))
 	{
@@ -114,6 +115,7 @@ void Game::processEvents()
 		case GameState::Hanger:
 			break;
 		case GameState::Market:
+			m_market.processEvents(event);
 			break;
 		case GameState::Pause:
 			break;
@@ -152,6 +154,7 @@ void Game::update(sf::Time time)
 	case GameState::Hanger:
 		break;
 	case GameState::Market:
+		m_market.update(time, m_window);
 		break;
 	case GameState::Pause:
 		break;
@@ -210,6 +213,7 @@ void Game::render()
 	case GameState::Hanger:
 		break;
 	case GameState::Market:
+		m_market.render(m_window);
 		break;
 	case GameState::Pause:
 		break;

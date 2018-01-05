@@ -28,6 +28,7 @@
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Market.cpp" />
     <ClCompile Include="MyVector2D.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="Splash.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="Hub.h" />
     <ClInclude Include="Logo.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Market.h" />
     <ClInclude Include="MyVector2D.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="Splash.h" />

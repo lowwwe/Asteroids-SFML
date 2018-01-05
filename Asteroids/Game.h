@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Help.h"
 #include "GamePlay.h"
+#include "Market.h"
 #include <string.h>
 
 
@@ -79,6 +80,8 @@ private:
 	Hub m_hub;
 	Map m_map;
 	Help m_help;
+	Market m_market;
+	
 	
 	sf::Font m_font; // nasa font
 	Music m_currentMusic = Music::Menu;
