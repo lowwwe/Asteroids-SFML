@@ -3,6 +3,8 @@
 
 
 GameState Game::s_currentGameState = GameState::Logo;
+Music Game::s_music = Music::Menu;
+GamePlay Game::s_gameplay;
 Planet Game::g_planets[] = {
 	{ "Moon",{ 0.0, 0.1, 0.1, 0.0, 0.0 }, 0.9, sf::IntRect{ 534,41,30,25 } ,false },
 	{ "Venus",{ 0.2, 0.2, 0.0, 0.0, 0.0 }, 0.1, sf::IntRect{ 250, 10, 30, 50 }, true },
@@ -16,6 +18,7 @@ Planet Game::g_planets[] = {
 
 
 };
+int Game::s_currentPlanet = -1;
 
 
 /*
@@ -43,13 +46,21 @@ Game::Game() :
 	m_hub.initialise(m_font);
 	m_map.initialise(m_font);
 	m_help.initialise(m_font);
-	m_market.initialise(m_font);
+	s_gameplay.initialise(m_font);
 	if (!m_menuMusic.openFromFile("ASSETS\\AUDIO\\menumusic.ogg"))
 	{
 		std::cout << "Problem with menu musoic" << std::endl;
 	}
 	m_menuMusic.setLoop(true);
 	m_menuMusic.play();	
+	if (!m_levelmusic.openFromFile("ASSETS\\AUDIO\\levelmusic.ogg"))
+	{
+		std::cout << "Problem with menu musoic" << std::endl;
+	}
+
+	m_levelmusic.setLoop(true);
+	m_levelmusic.setVolume(1.0f);
+	
 }
 
 
@@ -103,11 +114,11 @@ void Game::processEvents()
 		case GameState::Hanger:
 			break;
 		case GameState::Market:
-			m_market.processEvents(event);
 			break;
 		case GameState::Pause:
 			break;
 		case GameState::Game:
+			s_gameplay.processEvents(event);
 			break;
 		case GameState::Help:
 			m_help.processEvents(event);
@@ -122,6 +133,7 @@ void Game::processEvents()
 
 void Game::update(sf::Time time)
 {
+	checkMusic();
 	switch (s_currentGameState)
 	{
 	case GameState::Logo:
@@ -140,11 +152,11 @@ void Game::update(sf::Time time)
 	case GameState::Hanger:
 		break;
 	case GameState::Market:
-		m_market.update(time, m_window);
 		break;
 	case GameState::Pause:
 		break;
 	case GameState::Game:
+		s_gameplay.update(time);
 		break;
 	case GameState::Help:
 		m_help.update(time, m_window);
@@ -156,6 +168,25 @@ void Game::update(sf::Time time)
 	}
 }
 
+
+void Game::checkMusic()
+{
+	if (Game::s_music != m_currentMusic)
+	{
+		if (m_currentMusic == Music::Level)
+		{
+			m_menuMusic.play();
+			m_levelmusic.stop();
+			m_currentMusic = Music::Menu;
+		}
+		else
+		{
+			m_menuMusic.stop();
+			m_levelmusic.play();
+			m_currentMusic = Music::Level;
+		}
+	}
+}
 
 void Game::render()
 {
@@ -179,11 +210,11 @@ void Game::render()
 	case GameState::Hanger:
 		break;
 	case GameState::Market:
-		m_market.render(m_window);
 		break;
 	case GameState::Pause:
 		break;
 	case GameState::Game:
+		s_gameplay.render(m_window);
 		break;
 	case GameState::Help:
 		m_help.render(m_window);

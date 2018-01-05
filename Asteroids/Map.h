@@ -45,7 +45,7 @@ private:
 
 
 	bool m_mouseClick;
-	int m_currentPlanet;
+	
 };
 
 #endif // !MAP

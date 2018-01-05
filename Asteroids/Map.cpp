@@ -7,7 +7,6 @@
 
 
 Map::Map()
-	: m_currentPlanet{-1}
 {
 	if (!m_gemsTexture.loadFromFile("ASSETS\\IMAGES\\gems.png"))
 	{
@@ -57,10 +56,10 @@ void Map::render(sf::RenderWindow & window)
 			window.draw(m_planetSprites[i]);
 		}
 	}
-	if (m_currentPlanet > -1)
+	if (Game::s_currentPlanet > -1)
 	{
 		sf::Color colour{ 255,255,255,255 };
-		if (Game::g_planets[m_currentPlanet].active)
+		if (Game::g_planets[Game::s_currentPlanet].active)
 		{
 			colour = sf::Color::Yellow;
 		}
@@ -72,14 +71,14 @@ void Map::render(sf::RenderWindow & window)
 			m_gemsSprite.setTextureRect({ i * 32,0,32,32 });
 			m_gemsSprite.setPosition({ 50.0f,140.0f + i * 40 });
 			window.draw(m_gemsSprite);
-			int gem =static_cast<int>( Game::g_planets[m_currentPlanet].minerals[i] * 100.0);
+			int gem =static_cast<int>( Game::g_planets[Game::s_currentPlanet].minerals[i] * 100.0);
 			m_gemProbability.setString(": " + std::to_string(gem) + "%");
 			m_gemProbability.setPosition({ 90.0f,140.0f + i * 40 });
 			window.draw(m_gemProbability);
 		}
-		int pirates = static_cast<int>(Game::g_planets[m_currentPlanet].pirates * 100.0);
+		int pirates = static_cast<int>(Game::g_planets[Game::s_currentPlanet].pirates * 100.0);
 		m_pirates.setString("Pirates : " + std::to_string(pirates) + "%");
-		m_planetName.setString(Game::g_planets[m_currentPlanet].name);
+		m_planetName.setString(Game::g_planets[Game::s_currentPlanet].name);
 		window.draw(m_planetName);
 		window.draw(m_pirates);
 	}
@@ -89,7 +88,7 @@ void Map::render(sf::RenderWindow & window)
 
 void Map::update(sf::Time deltaTime, sf::RenderWindow & window)
 {
-	m_currentPlanet = -1;
+	Game::s_currentPlanet = -1;
 	for (size_t i = 0; i < maxPlanets; i++)
 	{
 		if (sf::Mouse::getPosition(window).x > Game::g_planets[i].location.left
@@ -97,7 +96,7 @@ void Map::update(sf::Time deltaTime, sf::RenderWindow & window)
 			&& sf::Mouse::getPosition(window).y > Game::g_planets[i].location.top
 			&& sf::Mouse::getPosition(window).y < Game::g_planets[i].location.top + Game::g_planets[i].location.height)
 		{
-			m_currentPlanet = i;
+			Game::s_currentPlanet = i;
 		}
 	}
 	if (m_mouseClick)
@@ -106,10 +105,12 @@ void Map::update(sf::Time deltaTime, sf::RenderWindow & window)
 		{
 			Game::s_currentGameState = GameState::Hub;
 		}
-		if (m_currentPlanet != -1 && Game::g_planets[m_currentPlanet].active)
+		if (Game::s_currentPlanet != -1 && Game::g_planets[Game::s_currentPlanet].active)
 		{
 			//setupPlanet(m_currentPlanet);
+			Game::s_gameplay.setupLevel(Game::s_currentPlanet);
 			Game::s_currentGameState = GameState::Game;
+			Game::s_music = Music::Level;
 			//intitialiseLevel(m_currentPlanet;)
 		}
 	}
