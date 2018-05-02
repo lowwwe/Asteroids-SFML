@@ -40,6 +40,8 @@ private:
 	bool m_fire{ false };
 
 	void fireBullet();
+	void collisions();
+	bool checkBulletAsteroid(Bullet &t_bullet, Asteroid &t_asteroid);
 	
 };
 

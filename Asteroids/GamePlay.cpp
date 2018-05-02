@@ -89,6 +89,7 @@ void GamePlay::update(sf::Time t_deltaTime)
 	{
 		m_bullets[i].update(t_deltaTime);
 	}
+	collisions();
 }
 
 void GamePlay::processEvents(sf::Event t_event)
@@ -118,6 +119,10 @@ void GamePlay::processEvents(sf::Event t_event)
 		{
 			m_fire = true; 			
 		}
+		if (sf::Keyboard::LShift == t_event.key.code || sf::Keyboard::RShift == t_event.key.code)
+		{
+			m_ship.m_sheildOn = true;
+		}
 	}
 	if (sf::Event::KeyReleased == t_event.type)
 	{
@@ -135,6 +140,10 @@ void GamePlay::processEvents(sf::Event t_event)
 			m_shipAccelerate = false;
 			m_engineSound.stop();
 			m_ship.m_enginePowerOn = false;
+		}
+		if (sf::Keyboard::LShift == t_event.key.code || sf::Keyboard::RShift == t_event.key.code)
+		{
+			m_ship.m_sheildOn = false;
 		}
 	}
 }
@@ -177,4 +186,71 @@ void GamePlay::fireBullet()
 		}
 		++i;
 	}
+}
+
+void GamePlay::collisions()
+{
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		if (m_bullets[i].m_alive)
+		{
+			for (int j = 0; j < MAX_ASTEROIDS; j++)
+			{
+				if (m_asteroids[j].m_active)
+				{
+					if (checkBulletAsteroid(m_bullets[i], m_asteroids[j]))
+					{
+						m_bullets[i].m_alive = false;
+						bool notFound = true;
+						int index = 0;
+						while (notFound && index < MAX_ASTEROIDS)
+						{
+							if(!m_asteroids[index].m_active)
+							{ 
+								notFound = false;
+							}
+							else
+							{
+								index++;
+							}
+						}
+						if (!notFound)
+						{
+							m_asteroids[j].reSize(m_bullets[i], m_asteroids[index]);
+						}
+						else
+						{
+							m_asteroids[j].destroy();
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+bool GamePlay::checkBulletAsteroid(Bullet & t_bullet, Asteroid & t_asteroid)
+{	
+	float gap = Asteroid::s_sizes[ t_asteroid.m_size] + 16.0f;
+	if (t_bullet.m_location.y < t_asteroid.m_location.y - gap)
+	{
+		return false;
+	}
+	if (t_bullet.m_location.y > t_asteroid.m_location.y + gap)
+	{
+		return false;
+	}
+	if (t_bullet.m_location.x < t_asteroid.m_location.x - gap)
+	{
+		return false;
+	}
+	if (t_bullet.m_location.x > t_asteroid.m_location.x + gap)
+	{
+		return false;
+	}
+	if ((t_asteroid.m_location - t_bullet.m_location).lengthSquared() > (gap * gap / 4))
+	{
+		return false;
+	}
+	return true;
 }

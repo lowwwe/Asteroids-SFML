@@ -21,10 +21,16 @@ public:
 	MyVector2D m_location{ 400.0 ,300.0 };
 	bool m_enginePowerOn{ false };
 	float m_heading = 0.0f;
+	bool m_sheildOn = false;
+	float m_shieldAplha = 0;
+	bool m_alphaUp = true;
+	int m_sheildEnergy = 500;
 
 private:
 	sf::Texture m_shipTextures[2];
 	sf::Sprite m_shipSprite;
+	sf::Texture m_shieldTexture;
+	sf::Sprite m_shieldSprite;
 	
 	MyVector2D m_velocity;
 	
@@ -39,6 +45,7 @@ private:
 	
 	void screenWrap();
 	void engineFrame();
+	void shield();
 	
 
 };

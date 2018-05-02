@@ -3,6 +3,7 @@
 
 #include <SFML\Graphics.hpp>
 #include "MyVector2D.h"
+#include "Bullet.h"
 
 float const SPIN_FACTOR = 0.06f;
 
@@ -23,6 +24,8 @@ public:
 	void render(sf::RenderWindow &t_window);
 	void initialise(int _initialSize);
 	void reStart(int t_size);
+	bool reSize(Bullet &t_bullet, Asteroid t_newAsteroid); 
+	bool destroy();
 
 private:
 	sf::Texture m_asteroidTexture[4];

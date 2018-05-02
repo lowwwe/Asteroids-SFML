@@ -19,6 +19,15 @@ Ship::Ship()
 	m_shipSprite.setPosition(m_location - MyVector2D{32, 32});
 	m_shipSprite.setOrigin(32.0f, 32.0f);
 	m_shipSprite.rotate(90);
+	if (!m_shieldTexture.loadFromFile("assets\\images\\shield.png"))
+	{
+		std::cout << "problem loading small shield" << std::endl;
+	}
+	m_shieldSprite.setTexture(m_shieldTexture);
+	m_shieldSprite.setOrigin(32.0f, 32.0f);
+	m_shieldSprite.setPosition(m_location - MyVector2D{ 32, 32 });
+
+
 }
 
 
@@ -29,6 +38,29 @@ Ship::~Ship()
 void Ship::render(sf::RenderWindow & t_window)
 {
 	t_window.draw(m_shipSprite);
+	if (m_sheildOn)
+	{
+		m_shieldSprite.setPosition(m_shipSprite.getPosition());
+		if (m_alphaUp)
+		{
+			m_shieldAplha += 0.1f;
+		}
+		else
+		{
+			m_shieldAplha -= 0.1;
+		}
+		if (m_shieldAplha > 255.0f)
+		{
+			m_alphaUp = false;
+		}
+		if (m_shieldAplha < 50.0f)
+		{
+			m_alphaUp = true;
+		}
+		m_shieldSprite.setColor(sf::Color{ 255,255,255,static_cast<sf::Uint8>(m_shieldAplha)});
+		t_window.draw(m_shieldSprite);
+		m_shieldSprite.rotate(0.05f);
+	}
 }
 
 void Ship::reset()
@@ -69,6 +101,7 @@ void Ship::update(sf::Time t_delta)
 	friction();
 	screenWrap();
 	engineFrame();
+	shield();
 }
 
 void Ship::friction()
@@ -125,5 +158,16 @@ void Ship::engineFrame()
 	else
 	{
 		m_shipSprite.setTextureRect(sf::IntRect{ 0,0,64,64 });
+	}
+}
+
+void Ship::shield()
+{
+	if (m_sheildOn)
+	{
+		if (m_sheildEnergy-- < 0)
+		{
+			m_sheildOn = false;
+		}
 	}
 }

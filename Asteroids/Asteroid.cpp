@@ -77,6 +77,16 @@ void Asteroid::reStart(int t_size)
 	
 }
 
+bool Asteroid::reSize(Bullet & t_bullet, Asteroid t_newAsteroid)
+{
+	return false;
+}
+
+bool Asteroid::destroy()
+{
+	return false;
+}
+
 void Asteroid::screenWrap()
 {
 	if (m_location.y < - s_sizes[m_size]/2)
