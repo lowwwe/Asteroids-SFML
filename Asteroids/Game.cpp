@@ -19,6 +19,9 @@ Planet Game::g_planets[] = {
 
 };
 int Game::s_currentPlanet = -1;
+int Game::s_gems[] = { 0,0,0,0,0,0 };
+
+
 
 
 /*
@@ -56,12 +59,19 @@ Game::Game() :
 	m_menuMusic.play();	
 	if (!m_levelmusic.openFromFile("ASSETS\\AUDIO\\levelmusic.ogg"))
 	{
-		std::cout << "Problem with menu musoic" << std::endl;
+		std::cout << "Problem with menu music" << std::endl;
 	}
 
 	m_levelmusic.setLoop(true);
 	m_levelmusic.setVolume(1.0f);
-	
+#ifdef _DEBUG
+	Game::s_gems[0] = 10;
+	Game::s_gems[1] = 10;
+	Game::s_gems[2] = 10;
+	Game::s_gems[3] = 10;
+	Game::s_gems[4] = 10;
+#endif // _DEBUG
+
 }
 
 

@@ -64,6 +64,7 @@ public:
 	static int s_currentPlanet;
 	static Music s_music;
 	static GamePlay s_gameplay;
+	static int s_gems[];
 
 private:
 	void render();
