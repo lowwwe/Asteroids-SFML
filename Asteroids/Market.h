@@ -25,6 +25,7 @@ private:
 	sf::Font m_font;	
 	sf::Text m_titleText;
 	sf::Text m_valueText;
+	sf::Text m_holdingText;
 	int m_marketSelection = -1;
 
 	Contract m_contracts[MAX_CONTRACTS];

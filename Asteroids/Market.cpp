@@ -3,9 +3,9 @@
 #include <iostream>
 
 const float MARKET_LINE_GAP = 48.0f;
-const float CONTRACT_OFFSET_X = 100.0f;
+const float CONTRACT_OFFSET_X = 300.0f;
 const float CONTRACT_OFFSET_Y = 200.0f;
-const float VALUE_OFFSET_X = 400.0f;
+const float VALUE_OFFSET_X = 600.0f;
 const float INTER_GEM_GAP = 36.0f;
 
 Market::Market()
@@ -46,6 +46,23 @@ void Market::render(sf::RenderWindow & t_window)
 	t_window.draw(m_menuIconSprite);
 	t_window.draw(m_titleText);
 
+
+
+	m_holdingText.setString("Space Credits \n " + std::to_string(Game::s_credits));
+	m_holdingText.setPosition(100.0f, 110.0f);
+	t_window.draw(m_holdingText);
+	int foundInHand = 0;
+	for (int i = 0; i < GEM_SLOTS; i++)
+	{
+		if (Game::s_gems[i] > 0)
+		{
+			m_gemsSprites[i].setPosition(100.0f, CONTRACT_OFFSET_Y + foundInHand * MARKET_LINE_GAP);
+			t_window.draw(m_gemsSprites[i]);
+			m_holdingText.setString(std::to_string(Game::s_gems[i]));
+			m_holdingText.setPosition(140.0f, CONTRACT_OFFSET_Y + foundInHand++ * MARKET_LINE_GAP);
+			t_window.draw(m_holdingText);
+		}
+	}
 	
 	int found = 0;  // only display top 5
 	int contractNo = 0; // don't check past all contracts
@@ -75,7 +92,7 @@ void Market::render(sf::RenderWindow & t_window)
 				m_valueText.setFillColor(sf::Color{ 128,128,128,255 });
 			}
 			m_valueText.setString(std::to_string(m_contracts[contractNo].m_value));
-			m_valueText.setPosition(VALUE_OFFSET_X , CONTRACT_OFFSET_Y + found * 48.0f);
+			m_valueText.setPosition(VALUE_OFFSET_X , CONTRACT_OFFSET_Y + found * MARKET_LINE_GAP);
 			t_window.draw(m_valueText);
 			found++;
 		}
@@ -136,7 +153,9 @@ void Market::initialise(sf::Font & t_font)
 {
 	m_font = t_font;
 	setupText(m_titleText, "Market", { 350,50 });
-	setupText(m_valueText, "", { 200,200 });
+	setupText(m_valueText, "", { 0,0 });
+	setupText(m_holdingText, "", { 0,0 });
+	
 }
 
 void Market::setupText(sf::Text & t_text, std::string t_string, sf::Vector2f t_position)
