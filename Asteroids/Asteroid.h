@@ -4,7 +4,7 @@
 #include <SFML\Graphics.hpp>
 #include "MyVector2D.h"
 
-double const SPIN_FACTOR = 0.06f;
+float const SPIN_FACTOR = 0.06f;
 
 class Asteroid
 {

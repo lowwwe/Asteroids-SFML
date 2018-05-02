@@ -72,7 +72,7 @@ void Asteroid::reStart(int t_size)
 	m_velocity = MyVector2D{ (std::rand() % 40) / 10.0,(std::rand() % 40) / 10.0 };
 	m_location = MyVector2D{ static_cast<double>(std::rand() % 800),static_cast<double>(std::rand() % 640 )};
 	m_asteroidSprite.setTexture(m_asteroidTexture[m_size],true);
-	m_asteroidSprite.setOrigin(s_sizes[m_size]/2, s_sizes[m_size]/2);
+	m_asteroidSprite.setOrigin(static_cast<float>(s_sizes[m_size]/2), static_cast<float>(s_sizes[m_size]/2));
 	
 	
 }
