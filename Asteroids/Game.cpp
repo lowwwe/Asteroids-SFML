@@ -20,6 +20,7 @@ Planet Game::g_planets[] = {
 };
 int Game::s_currentPlanet = -1;
 int Game::s_gems[] = { 0,0,0,0,0,0 };
+int Game::s_credits = 0;
 
 
 
@@ -70,6 +71,7 @@ Game::Game() :
 	Game::s_gems[2] = 10;
 	Game::s_gems[3] = 10;
 	Game::s_gems[4] = 10;
+	Game::s_credits = 10000;
 #endif // _DEBUG
 
 }

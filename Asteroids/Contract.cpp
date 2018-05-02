@@ -1,4 +1,5 @@
 #include "Contract.h"
+#include "Game.h"
 
 
 
@@ -28,6 +29,11 @@ Contract::~Contract()
 void Contract::complete()
 {
 	m_completed = true;
+	for (int i = 0; i < GEM_SLOTS; i++)
+	{
+		Game::s_gems[i] -= m_requiredGems[i];			
+	}
+	Game::s_credits += m_value;		
 }
 
 bool Contract::check(int t_gems[])

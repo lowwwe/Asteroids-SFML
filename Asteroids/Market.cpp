@@ -90,11 +90,32 @@ void Market::update(sf::Time t_deltaTime, sf::RenderWindow & t_window)
 
 void Market::processEvents(sf::Event t_event)
 {
+
 	if (sf::Event::EventType::MouseButtonReleased == t_event.type)
 	{
 		if (t_event.mouseButton.x > 750 && t_event.mouseButton.y < 50)
 		{
 			Game::s_currentGameState = GameState::Hub;
+		}
+		if (m_marketSelection != -1)
+		{
+			int contractNo = 0;
+			int currentContract = -1;
+			while (contractNo < MAX_CONTRACTS)
+			{
+				if (!m_contracts[contractNo].m_completed)
+				{
+					currentContract++;
+					if (m_contracts[contractNo].check(Game::s_gems))
+					{
+						if (currentContract == m_marketSelection)
+						{
+							m_contracts[contractNo].complete();
+						}
+					}
+				}
+				contractNo++;
+			}
 		}
 	}
 	if (sf::Event::EventType::MouseMoved == t_event.type)
@@ -104,7 +125,7 @@ void Market::processEvents(sf::Event t_event)
 		{
 			if (t_event.mouseMove.y > CONTRACT_OFFSET_Y && t_event.mouseMove.x < CONTRACT_OFFSET_Y + 5 * MARKET_LINE_GAP)
 			{
-				m_marketSelection = (t_event.mouseMove.y - CONTRACT_OFFSET_Y) / MARKET_LINE_GAP;
+				m_marketSelection = static_cast<int>((t_event.mouseMove.y - CONTRACT_OFFSET_Y) / MARKET_LINE_GAP);
 			}
 		}
 
@@ -130,15 +151,17 @@ void Market::setupText(sf::Text & t_text, std::string t_string, sf::Vector2f t_p
 
 void Market::setupContracts()
 {
-	m_contracts[0].initialise( 1, 2, 0, 0, 0, 1000);
-	m_contracts[1].initialise(1, 3, 0, 2, 0, 2000);
-	m_contracts[2].initialise(0, 2, 2, 2, 0, 3000);
-	m_contracts[3].initialise(1, 3, 0, 2, 0, 4000);
-	m_contracts[4].initialise(1, 3, 0, 2, 0, 4000);
-	m_contracts[5].initialise(0, 0, 3, 2, 5, 7000);
-	m_contracts[6].initialise(1, 3, 0, 0, 4, 8000);
-	m_contracts[7].initialise(1, 0, 1, 0, 2, 4000);
-	m_contracts[8].initialise(1, 0, 1, 0, 3, 4000);
-	m_contracts[9].initialise(1, 1, 0, 0, 2, 2000);
-	
+	for (int i = 0; i < 10; i++)
+	{
+		m_contracts[i * 10 + 0].initialise(1, 2, 0, 0, 0, 1000);
+		m_contracts[i * 10 + 1].initialise(1, 3, 0, 2, 0, 2000);
+		m_contracts[i * 10 + 2].initialise(0, 2, 2, 2, 0, 3000);
+		m_contracts[i * 10 + 3].initialise(1, 3, 0, 2, 0, 4000);
+		m_contracts[i * 10 + 4].initialise(1, 3, 0, 2, 0, 4000);
+		m_contracts[i * 10 + 5].initialise(0, 0, 3, 2, 3, 7000);
+		m_contracts[i * 10 + 6].initialise(1, 3, 0, 0, 4, 8000);
+		m_contracts[i * 10 + 7].initialise(1, 0, 1, 0, 2, 4000);
+		m_contracts[i * 10 + 8].initialise(1, 0, 1, 0, 3, 4000);
+		m_contracts[i * 10 + 9].initialise(1, 1, 0, 0, 2, 2000);
+	}
 }

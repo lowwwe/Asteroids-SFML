@@ -3,7 +3,7 @@
 
 #include <SFML\Graphics.hpp>
 #include "Contract.h"
-const int MAX_CONTRACTS = 10;
+const int MAX_CONTRACTS = 100;
 
 class Market
 {
