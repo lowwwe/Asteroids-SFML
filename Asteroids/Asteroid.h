@@ -16,13 +16,13 @@ public:
 	static int s_sizes[];
 
 
-	sf::CircleShape dot{ 5.0f };
+	sf::CircleShape dot{ 2.0f };
 	bool m_active = false;
 	MyVector2D m_location;
 	int m_size = 3;
 	void update(sf::Time t_deltaTime);	
 	void render(sf::RenderWindow &t_window);
-	void initialise(int _initialSize);
+	void initialise(int t_size, MyVector2D t_velocity, MyVector2D t_position);
 	void reStart(int t_size);
 	bool reSize(Bullet &t_bullet, Asteroid t_newAsteroid); 
 	bool destroy();

@@ -18,11 +18,12 @@ public:
 
 	MyVector2D m_location;
 	static sf::Texture s_bulletTexture;
+	MyVector2D m_velocity;
 private:
 	void screenWrap();
 	int m_framesLeft = 180;
 	sf::Sprite m_bulletSprite;
-	MyVector2D m_velocity;
+	
 
 };
 

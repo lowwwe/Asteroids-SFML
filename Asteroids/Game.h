@@ -12,12 +12,12 @@
 #include "Market.h"
 #include <string.h>
 
-
+const int NO_MINERALS = 5;
 
 struct Planet
 {
 	std::string name;
-	double minerals[5];
+	double minerals[NO_MINERALS];
 	double pirates;
 	sf::IntRect location;
 	bool active;

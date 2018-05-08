@@ -1,4 +1,5 @@
 #include "GamePlay.h"
+#include "Game.h"
 #include <iostream>
 
 
@@ -33,11 +34,13 @@ GamePlay::GamePlay()
 		std::cout << "problem loading asteroid sound" << std::endl;
 	}
 	m_asteroidBreakSound.setBuffer(m_asteroidBreakSoundBuffer);
-	m_asteroidBreakSound.play(); 
+	
 	if (!Bullet::s_bulletTexture.loadFromFile("assets\\images\\bullet16.png"))
 	{
 		std::cout << "problem loading bullet texture" << std::endl;
 	}
+	m_explosions[0].loadContent();
+	m_crystals[0].loadContent();
 }
 
 
@@ -56,7 +59,16 @@ void GamePlay::render(sf::RenderWindow & t_window)
 	{
 		m_bullets[i].render(t_window);
 	}
-	m_bullets[0].render(t_window);
+	for (int i = 0; i < MAX_CRYSTALS; i++)
+	{
+		m_crystals[i].render(t_window);
+	}
+	for (int i = 0; i < MAX_EXPLOSIONS; i++)
+	{
+		m_explosions[i].render(t_window);
+	}
+
+
 	
 }
 
@@ -88,6 +100,14 @@ void GamePlay::update(sf::Time t_deltaTime)
 	for (size_t i = 0; i < MAX_BULLETS; i++)
 	{
 		m_bullets[i].update(t_deltaTime);
+	}
+	for (int i = 0; i < MAX_EXPLOSIONS; i++)
+	{
+		m_explosions[i].update(t_deltaTime);
+	}
+	for (int i = 0; i < MAX_CRYSTALS; i++)
+	{
+		m_crystals[i].update(t_deltaTime);
 	}
 	collisions();
 }
@@ -201,29 +221,49 @@ void GamePlay::collisions()
 					if (checkBulletAsteroid(m_bullets[i], m_asteroids[j]))
 					{
 						m_bullets[i].m_alive = false;
-						bool notFound = true;
+						bool found = false;
 						int index = 0;
-						while (notFound && index < MAX_ASTEROIDS)
+						while (!found && index < MAX_ASTEROIDS)
 						{
 							if(!m_asteroids[index].m_active)
 							{ 
-								notFound = false;
+								found = true;
 							}
 							else
 							{
 								index++;
 							}
 						}
-						if (!notFound)
+						if (found)
 						{
-							m_asteroids[j].reSize(m_bullets[i], m_asteroids[index]);
+							if (m_asteroids[j].reSize(m_bullets[i], m_asteroids[index]))
+							{								
+								newExplosion(m_asteroids[j].m_location, animation::Dust);
+								newCrystal(m_asteroids[j].m_location, -1);
+							}
+							else
+							{
+								m_asteroidBreakSound.play();								
+							}
 						}
 						else
 						{
-							m_asteroids[j].destroy();
+							m_asteroids[j].destroy();													
+							newCrystal(m_asteroids[j].m_location, -1);
 						}
 					}
 				}
+			}
+		}
+	}
+	for (int i = 0; i < MAX_CRYSTALS; i++)
+	{
+		if (m_crystals[i].m_active)
+		{
+			if (checkShipCrystal(m_ship.m_location, m_crystals[i].m_location))
+			{
+				m_crystals[i].m_active = false;
+				m_ship.addToHold(m_crystals[i].m_type);
 			}
 		}
 	}
@@ -253,4 +293,86 @@ bool GamePlay::checkBulletAsteroid(Bullet & t_bullet, Asteroid & t_asteroid)
 		return false;
 	}
 	return true;
+}
+
+void GamePlay::newExplosion(MyVector2D t_location, animation t_type)
+{
+	int i{ 0 };
+	bool found{ false };
+	while (!found && i < MAX_EXPLOSIONS)
+	{
+		if (!m_explosions[i].m_active)
+		{
+			found = true;
+			m_explosions[i].activate(t_location , t_type);
+		}
+		i++;
+	}
+
+}
+
+
+int GamePlay::chooseCrystal()
+{
+	double decimal = (rand() % 1000) / 1000.0;
+	double checkpoint{ 0.0 };
+	
+	for (int i = 0; i < NO_MINERALS; i++)
+	{
+		checkpoint += Game::g_planets[Game::s_currentPlanet].minerals[i];
+		if (decimal < checkpoint)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+bool GamePlay::checkShipCrystal(MyVector2D t_shipLocation, MyVector2D t_crystalLocation)
+{
+	const double touchingDistance = 48.0; //  64/2 + 32/2
+	const double touchingDistanceSquared = touchingDistance * touchingDistance;
+	MyVector2D gap = t_shipLocation - t_crystalLocation;
+	if (gap.x < -touchingDistance)
+	{
+		return false;
+	}
+	if (gap.x > touchingDistance)
+	{
+		return false;
+	}
+	if (gap.y < -touchingDistance)
+	{
+		return false;
+	}
+	if (gap.y > touchingDistance)
+	{
+		return false;
+	}
+	if (gap.lengthSquared() < touchingDistanceSquared)
+	{
+		return false;
+	}
+	return true;
+}
+void GamePlay::newCrystal(MyVector2D t_location, int t_type)
+{
+	int i{ 0 };
+	bool found{ false };	
+	if (t_type == -1)
+	{
+		t_type = chooseCrystal();
+	}
+	if (t_type == -1)
+	{
+		return;
+	}
+	while (!found && i <MAX_CRYSTALS)
+	{
+		if (!m_crystals[i].m_active)
+		{
+			found = true;
+			m_crystals[i].activate(t_location, t_type);
+		}
+		i++;
+	}
 }

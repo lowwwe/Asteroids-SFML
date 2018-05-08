@@ -59,8 +59,17 @@ void Asteroid::render(sf::RenderWindow & t_window)
 	}
 }
 
-void Asteroid::initialise(int _initialSize)
+void Asteroid::initialise(int t_size, MyVector2D t_velocity, MyVector2D t_position)
 {
+	m_active = true;
+	m_size = t_size;
+	m_spinRate = static_cast<float>((std::rand() % 100) - 50) * SPIN_FACTOR;
+	m_angle = 0.0f;
+	m_velocity = t_velocity;
+	m_location = t_position;
+	m_asteroidSprite.setTexture(m_asteroidTexture[m_size], true);
+	m_asteroidSprite.setOrigin(static_cast<float>(s_sizes[m_size] / 2), static_cast<float>(s_sizes[m_size] / 2));
+
 }
 
 void Asteroid::reStart(int t_size)
@@ -74,11 +83,32 @@ void Asteroid::reStart(int t_size)
 	m_asteroidSprite.setTexture(m_asteroidTexture[m_size],true);
 	m_asteroidSprite.setOrigin(static_cast<float>(s_sizes[m_size]/2), static_cast<float>(s_sizes[m_size]/2));
 	
-	
 }
 
 bool Asteroid::reSize(Bullet & t_bullet, Asteroid t_newAsteroid)
 {
+	if (m_size == 0)
+	{
+		m_active = false;				
+		return true;
+	}
+	else
+	{
+		m_size--;
+		double dotProduct = m_velocity.dot(t_bullet.m_velocity);
+		MyVector2D newDirection = t_bullet.m_velocity - m_velocity;
+		m_asteroidSprite.setTexture(m_asteroidTexture[m_size], true);
+		m_asteroidSprite.setOrigin(static_cast<float>(s_sizes[m_size] / 2), static_cast<float>(s_sizes[m_size] / 2));
+		if (dotProduct < 0)
+		{
+			t_newAsteroid.initialise(m_size, newDirection /2,m_location);
+		}
+		else
+		{
+			t_newAsteroid.initialise(0, t_bullet.m_velocity / 2,  t_bullet.m_location);
+		}
+
+	}
 	return false;
 }
 

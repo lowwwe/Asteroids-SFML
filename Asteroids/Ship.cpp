@@ -21,11 +21,25 @@ Ship::Ship()
 	m_shipSprite.rotate(90);
 	if (!m_shieldTexture.loadFromFile("assets\\images\\shield.png"))
 	{
-		std::cout << "problem loading small shield" << std::endl;
+		std::cout << "problem loading shield" << std::endl;
 	}
 	m_shieldSprite.setTexture(m_shieldTexture);
 	m_shieldSprite.setOrigin(32.0f, 32.0f);
 	m_shieldSprite.setPosition(m_location - MyVector2D{ 32, 32 });
+	if (!m_gemsTexture.loadFromFile("assets\\images\\gems.png"))
+	{
+		std::cout << "problem loading gems" << std::endl;
+	}
+	m_gemsSprite.setTexture(m_gemsTexture);
+	if (!m_holdTexture.loadFromFile("assets\\images\\hold.png"))
+	{
+		std::cout << "problem loading hold" << std::endl;
+	}
+	m_holdSprite.setTexture(m_holdTexture);	
+	for (int i = 0; i < MAX_HOLD_ITEMS; i++)
+	{
+		m_hold[i] = -1;
+	}
 
 
 }
@@ -40,32 +54,16 @@ void Ship::render(sf::RenderWindow & t_window)
 	t_window.draw(m_shipSprite);
 	if (m_sheildOn)
 	{
-		m_shieldSprite.setPosition(m_shipSprite.getPosition());
-		if (m_alphaUp)
-		{
-			m_shieldAplha += 0.1f;
-		}
-		else
-		{
-			m_shieldAplha -= 0.1;
-		}
-		if (m_shieldAplha > 255.0f)
-		{
-			m_alphaUp = false;
-		}
-		if (m_shieldAplha < 50.0f)
-		{
-			m_alphaUp = true;
-		}
-		m_shieldSprite.setColor(sf::Color{ 255,255,255,static_cast<sf::Uint8>(m_shieldAplha)});
-		t_window.draw(m_shieldSprite);
-		m_shieldSprite.rotate(0.05f);
+		renderShield(t_window);
 	}
+	renderHold(t_window);
 }
 
 void Ship::reset()
 {
 	m_location = MyVector2D{ 400.0 ,300.0 };
+	m_accelarationRate = m_levels[ENGINE][m_currentLevels[ENGINE]];
+	m_holdCapicity = m_levels[HOLD][m_currentLevels[HOLD]];
 
 
 
@@ -89,7 +87,7 @@ void Ship::accelerate()
 	MyVector2D trust{ cos(headingRadians),sin(headingRadians) };
 
 	trust.normalise();
-	trust * m_accelarationRate;
+	trust = trust *  m_accelarationRate;
 	m_velocity += trust;
 	
 }
@@ -112,13 +110,13 @@ void Ship::friction()
 	}
 	if (m_velocity.lengthSquared() > 5.0)
 	{
-		m_velocity = m_velocity *.99;
+		m_velocity = m_velocity * FAST_FRICTION;
 	}
 	else
 	{
-		if (m_velocity.lengthSquared() > 0.5)
+		if (m_velocity.lengthSquared() > 0.1)
 		{
-			m_velocity = m_velocity * m_dragCoefficient;
+			m_velocity = m_velocity * SLOW_FRICTION;
 		}
 		else
 		{
@@ -170,4 +168,63 @@ void Ship::shield()
 			m_sheildOn = false;
 		}
 	}
+}
+
+void Ship::renderShield(sf::RenderWindow & t_window)
+{
+	m_shieldSprite.setPosition(m_shipSprite.getPosition());
+	if (m_alphaUp)
+	{
+		m_shieldAplha += 0.1f;
+	}
+	else
+	{
+		m_shieldAplha -= 0.1;
+	}
+	if (m_shieldAplha > 255.0f)
+	{
+		m_alphaUp = false;
+	}
+	if (m_shieldAplha < 50.0f)
+	{
+		m_alphaUp = true;
+	}
+	m_shieldSprite.setColor(sf::Color{ 255,255,255,static_cast<sf::Uint8>(m_shieldAplha) });
+	t_window.draw(m_shieldSprite);
+	m_shieldSprite.rotate(0.05f);
+}
+
+void Ship::renderHold(sf::RenderWindow & t_window)
+{
+	float holdOffsetX = 60.0f;
+	float holdOffsetY = 540.0f;
+	sf::IntRect textureRect{ 0,0,32,32 };
+	
+	for (int i = 0; i < m_holdCapicity; i++)
+	{
+		m_holdSprite.setPosition(holdOffsetX, holdOffsetY);
+		holdOffsetX += 4.0f;
+		t_window.draw(m_holdSprite);
+		if (m_hold[i] != -1)
+		{
+			textureRect.left = m_hold[i] * 32;
+			m_gemsSprite.setTextureRect(textureRect);			
+			m_gemsSprite.setPosition(holdOffsetX, holdOffsetY + 4.0f);			
+			t_window.draw(m_gemsSprite);
+		}
+		holdOffsetX += 36.0f;
+	}
+}
+
+void Ship::addToHold(int t_type)
+{
+	for (int i = 0; i < m_holdCapicity; i++)
+	{
+		if (m_hold[i] == -1)
+		{
+			m_hold[i] = t_type;
+			return;	
+		}
+	}
+	return;	
 }

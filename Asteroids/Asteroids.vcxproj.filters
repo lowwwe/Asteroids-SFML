@@ -57,6 +57,12 @@
     <ClCompile Include="Contract.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Crystal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -96,6 +102,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Contract.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Crystal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
