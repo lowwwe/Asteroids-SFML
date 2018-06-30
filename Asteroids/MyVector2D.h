@@ -2,7 +2,7 @@
 #define MYVECTOR2D
 
 #include <string>
-#include <SFML/Graphics.hpp>
+#include <SFML\Graphics.hpp>
 
 /// <summary>
 /// My own Vector class for a 2D vector/// 

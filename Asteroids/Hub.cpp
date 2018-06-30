@@ -19,13 +19,14 @@ Hub::~Hub()
 {
 }
 
-void Hub::render(sf::RenderWindow & window)
+void Hub::render(sf::RenderWindow & t_window)
 {
-	window.draw(m_backgroundSprite);
-	window.draw(m_mapText);
-	window.draw(m_hangerText);
-	window.draw(m_marketText);
-	window.draw(m_helpText);
+	t_window.draw(m_backgroundSprite);
+	t_window.draw(m_mapText);
+	t_window.draw(m_hangerText);
+	t_window.draw(m_marketText);
+	t_window.draw(m_helpText);
+	t_window.draw(m_exitText);
 }
 
 void Hub::update(sf::Time deltaTime, sf::RenderWindow &window)
@@ -35,6 +36,7 @@ void Hub::update(sf::Time deltaTime, sf::RenderWindow &window)
 	m_hangerText.setFillColor(sf::Color::White);
 	m_marketText.setFillColor(sf::Color::White);
 	m_helpText.setFillColor(sf::Color::White);
+	m_exitText.setFillColor(sf::Color::White);
 	m_currentRegion = HubRegion::None;
 	if (mousePosition.y < 400)
 	{
@@ -65,11 +67,18 @@ void Hub::update(sf::Time deltaTime, sf::RenderWindow &window)
 			}
 		}
 	}
+	if (mousePosition.y > 500 && mousePosition.y < 530
+		&& mousePosition.x > 150 && mousePosition.x < 250)
+	{
+		m_exitText.setFillColor(sf::Color::Yellow);
+		m_currentRegion = HubRegion::Exit;
+	}
 }
 
 void Hub::processEvents(sf::Event event)
 {
-	if (sf::Event::EventType::MouseButtonPressed == event.type)
+
+	if (sf::Event::EventType::MouseButtonReleased == event.type)
 	{
 		switch (m_currentRegion)
 		{
@@ -96,6 +105,7 @@ void Hub::initialise(sf::Font & font)
 	setupText(m_hangerText, "HANGER", { 500,100 });
 	setupText(m_marketText, "MARKET", { 150,300 });
 	setupText(m_helpText, "HELP", { 500,300 });
+	setupText(m_exitText, "EXIT", { 150,500 });
 }
 void  Hub::setupText(sf::Text &text, std::string string, sf::Vector2f position)
 {

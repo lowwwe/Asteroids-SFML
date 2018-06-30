@@ -11,6 +11,8 @@
 const int MAX_ASTEROIDS = 20;
 const int MAX_EXPLOSIONS = 2;
 const int MAX_CRYSTALS = 10;
+const int RESUME = 1;
+const int RETURN = 2;
 
 
 
@@ -20,8 +22,11 @@ public:
 	GamePlay();
 	~GamePlay();
 	void render(sf::RenderWindow &t_window);
+	void pauseRender(sf::RenderWindow &t_window);
 	void update(sf::Time t_deltaTime);
+	void pauseUpdate(sf::Time t_deltaTime);
 	void processEvents(sf::Event t_event);
+	void pauseProcessEvents(sf::Event t_event);
 	void initialise(sf::Font & t_font);
 	void setupLevel(int t_levelNo);
 private:
@@ -41,10 +46,17 @@ private:
 	sf::Sound m_engineSound;
 	sf::SoundBuffer m_asteroidBreakSoundBuffer;
 	sf::Sound m_asteroidBreakSound;
+	sf::Text m_pausePromptText;
+	sf::Text m_resumeText;
+	sf::Text m_returnToBaseText;
+	sf::Font m_font; 
+
+
 	bool m_shipTrunRight{ false };
 	bool m_shipTrunLeft{ false };
 	bool m_shipAccelerate{ false };
 	bool m_fire{ false };
+	int m_pauseOption{ 0 };
 
 	void fireBullet();
 	void collisions();
@@ -53,6 +65,8 @@ private:
 	void newCrystal(MyVector2D t_location, int t_type);
 	int chooseCrystal();
 	bool checkShipCrystal(MyVector2D t_shipLocation, MyVector2D t_crystalLocation);
+	void setupText(sf::Text & t_text, std::string t_string, sf::Vector2f t_position);
+	void retrieveCargo();
 	
 };
 

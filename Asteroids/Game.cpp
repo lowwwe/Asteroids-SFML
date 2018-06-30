@@ -51,14 +51,15 @@ Game::Game() :
 	m_map.initialise(m_font);
 	m_help.initialise(m_font);
 	m_market.initialise(m_font);
+	m_hanger.initialise(m_font);
 	s_gameplay.initialise(m_font);
-	if (!m_menuMusic.openFromFile("ASSETS\\AUDIO\\menumusic.ogg"))
+	if (!m_menuMusic.openFromFile("ASSETS\\AUDIO\\menumusic2.ogg"))
 	{
 		std::cout << "Problem with menu musoic" << std::endl;
 	}
 	m_menuMusic.setLoop(true);
 	m_menuMusic.play();	
-	if (!m_levelmusic.openFromFile("ASSETS\\AUDIO\\levelmusic.ogg"))
+	if (!m_levelmusic.openFromFile("ASSETS\\AUDIO\\levelmusic2.ogg"))
 	{
 		std::cout << "Problem with menu music" << std::endl;
 	}
@@ -71,6 +72,7 @@ Game::Game() :
 	Game::s_gems[2] = 10;
 	Game::s_gems[3] = 10;
 	Game::s_gems[4] = 10;
+	Game::s_gems[5] = 2;
 	Game::s_credits = 10000;
 #endif // _DEBUG
 
@@ -102,10 +104,10 @@ void Game::run()
 
 void Game::processEvents()
 {
-	sf::Event event;
-	while (m_window.pollEvent(event))
+	sf::Event currentEvent;
+	while (m_window.pollEvent(currentEvent))
 	{
-		if (event.type == sf::Event::Closed)
+		if (currentEvent.type == sf::Event::Closed)
 		{
 			m_window.close();
 		}
@@ -114,28 +116,30 @@ void Game::processEvents()
 		case GameState::Logo:
 			break;
 		case GameState::Splash:
-			m_splash.processEvents(event);
+			m_splash.processEvents(currentEvent);
 			break;
 		case GameState::Start:
 			break;
 		case GameState::Hub:
-			m_hub.processEvents(event);
+			m_hub.processEvents(currentEvent);
 			break;
 		case GameState::Map:
-			m_map.processEvents(event);
+			m_map.processEvents(currentEvent);
 			break;
 		case GameState::Hanger:
+			m_hanger.processEvents(currentEvent);
 			break;
 		case GameState::Market:
-			m_market.processEvents(event);
+			m_market.processEvents(currentEvent);
 			break;
 		case GameState::Pause:
+			s_gameplay.pauseProcessEvents(currentEvent);
 			break;
 		case GameState::Game:
-			s_gameplay.processEvents(event);
+			s_gameplay.processEvents(currentEvent);
 			break;
 		case GameState::Help:
-			m_help.processEvents(event);
+			m_help.processEvents(currentEvent);
 			break;
 		case GameState::Over:
 			break;
@@ -145,36 +149,38 @@ void Game::processEvents()
 	}
 }
 
-void Game::update(sf::Time time)
+void Game::update(sf::Time timeSlice)
 {
 	checkMusic();
 	switch (s_currentGameState)
 	{
 	case GameState::Logo:
-		m_logo.update(time);
+		m_logo.update(timeSlice);
 		break;
 	case GameState::Splash:
 		break;
 	case GameState::Start:
 		break;
 	case GameState::Hub:
-		m_hub.update(time, m_window);
+		m_hub.update(timeSlice, m_window);
 		break;
 	case GameState::Map:
-		m_map.update(time, m_window);
+		m_map.update(timeSlice, m_window);
 		break;
 	case GameState::Hanger:
+		m_hanger.update(timeSlice, m_window);
 		break;
 	case GameState::Market:
-		m_market.update(time, m_window);
+		m_market.update(timeSlice, m_window);
 		break;
 	case GameState::Pause:
+		s_gameplay.pauseUpdate(timeSlice);
 		break;
 	case GameState::Game:
-		s_gameplay.update(time);
+		s_gameplay.update(timeSlice);
 		break;
 	case GameState::Help:
-		m_help.update(time, m_window);
+		m_help.update(timeSlice, m_window);
 		break;
 	case GameState::Over:
 		break;
@@ -223,11 +229,13 @@ void Game::render()
 		m_map.render(m_window);
 		break;
 	case GameState::Hanger:
+		m_hanger.render(m_window);
 		break;
 	case GameState::Market:
 		m_market.render(m_window);
 		break;
 	case GameState::Pause:
+		s_gameplay.pauseRender(m_window);
 		break;
 	case GameState::Game:
 		s_gameplay.render(m_window);

@@ -3,6 +3,7 @@
 
 
 
+int Ship::s_currentLevels[4] = { 1,2,0,0 };
 
 Ship::Ship()
 {
@@ -62,11 +63,13 @@ void Ship::render(sf::RenderWindow & t_window)
 void Ship::reset()
 {
 	m_location = MyVector2D{ 400.0 ,300.0 };
-	m_accelarationRate = m_levels[ENGINE][m_currentLevels[ENGINE]];
-	m_holdCapicity = m_levels[HOLD][m_currentLevels[HOLD]];
-
-
-
+	m_accelarationRate = m_levels[ENGINE][s_currentLevels[ENGINE]];
+	m_holdCapicity = m_levels[HOLD][s_currentLevels[HOLD]];
+	for (int i = 0; i < m_holdCapicity; i++)
+	{
+		m_hold[i] = -1;
+		 
+	}
 }
 
 void Ship::turnLeft()
@@ -179,7 +182,7 @@ void Ship::renderShield(sf::RenderWindow & t_window)
 	}
 	else
 	{
-		m_shieldAplha -= 0.1;
+		m_shieldAplha -= 0.1f;
 	}
 	if (m_shieldAplha > 255.0f)
 	{
@@ -227,4 +230,13 @@ void Ship::addToHold(int t_type)
 		}
 	}
 	return;	
+}
+
+int Ship::getHoldItem(int t_index)
+{
+	if (t_index < m_holdCapicity)
+	{
+		return m_hold[t_index];
+	}
+	return -1;
 }

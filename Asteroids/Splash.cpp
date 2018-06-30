@@ -33,7 +33,7 @@ void Splash::processEvents(sf::Event event)
 	{
 		Game::s_currentGameState = GameState::Hub;
 	}
-	if (sf::Event::EventType::MouseButtonPressed == event.type)
+	if (sf::Event::EventType::MouseButtonReleased == event.type)
 	{
 		Game::s_currentGameState = GameState::Hub;
 	}

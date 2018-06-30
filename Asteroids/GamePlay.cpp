@@ -72,6 +72,14 @@ void GamePlay::render(sf::RenderWindow & t_window)
 	
 }
 
+void GamePlay::pauseRender(sf::RenderWindow & t_window)
+{
+	render(t_window);
+	t_window.draw(m_pausePromptText);
+	t_window.draw(m_resumeText);
+	t_window.draw(m_returnToBaseText);
+}
+
 void GamePlay::update(sf::Time t_deltaTime)
 {
 	if (m_shipTrunRight)
@@ -110,6 +118,10 @@ void GamePlay::update(sf::Time t_deltaTime)
 		m_crystals[i].update(t_deltaTime);
 	}
 	collisions();
+}
+
+void GamePlay::pauseUpdate(sf::Time t_deltaTime)
+{
 }
 
 void GamePlay::processEvents(sf::Event t_event)
@@ -165,12 +177,64 @@ void GamePlay::processEvents(sf::Event t_event)
 		{
 			m_ship.m_sheildOn = false;
 		}
+		if (sf::Keyboard::Escape == t_event.key.code)
+		{
+			Game::s_currentGameState = GameState::Pause;
+		}
+	}
+}
+
+void GamePlay::pauseProcessEvents(sf::Event t_event)
+{
+	if (sf::Event::EventType::MouseMoved == t_event.type)
+	{
+		m_pauseOption = 0;
+		m_resumeText.setFillColor(sf::Color::White);
+		m_returnToBaseText.setFillColor(sf::Color::White);
+		if (t_event.mouseMove.x > 300 && t_event.mouseMove.x < 500)
+		{
+			if (t_event.mouseMove.y > 250 && t_event.mouseMove.y < 300)
+			{
+				m_pauseOption = RESUME;
+				m_resumeText.setFillColor(sf::Color::Yellow);
+				
+			}
+			if (t_event.mouseMove.y > 300 && t_event.mouseMove.y < 350)
+			{
+				m_pauseOption = RETURN;
+				m_returnToBaseText.setFillColor(sf::Color::Yellow);
+			}			
+		}
+	}
+	if (sf::Event::EventType::MouseButtonReleased == t_event.type)
+	{
+		if (m_pauseOption == RESUME)
+		{
+			Game::s_currentGameState = GameState::Game;
+		}
+		if (m_pauseOption == RETURN)
+		{
+			retrieveCargo();
+			Game::s_currentGameState = GameState::Hub;
+			Game::s_music = Music::Menu;
+		}
+	}
+	if (sf::Event::KeyReleased == t_event.type)
+	{
+		if (sf::Keyboard::Escape == t_event.key.code)
+		{
+			Game::s_currentGameState = GameState::Game;
+		}
 	}
 }
 
 void GamePlay::initialise(sf::Font & t_font)
 {
-	
+	m_font = t_font;
+	setupText(m_pausePromptText, "Game Paused", sf::Vector2f{ 280.0f, 200.0f });
+	m_pausePromptText.setCharacterSize(32);
+	setupText(m_resumeText, "Resume Game", sf::Vector2f{ 300.0f, 250.0f });
+	setupText(m_returnToBaseText, "Return to Base", sf::Vector2f{ 300.0f, 300.0f });		
 }
 
 void GamePlay::setupLevel(int t_levelNo)
@@ -202,7 +266,8 @@ void GamePlay::fireBullet()
 			found = true;
 			float xBit = std::cos(m_ship.m_heading /180.0f * PI_F);
 			float yBit = std::sin(m_ship.m_heading / 180.0f * PI_F);
-			m_bullets[i].reStart(1, m_ship.m_location, MyVector2D{ xBit,yBit }, m_ship.m_heading);
+			m_bullets[i].reStart(1, m_ship.m_location, MyVector2D{ xBit,yBit }, m_ship.m_heading);			
+			m_laserSound.play();
 		}
 		++i;
 	}
@@ -353,6 +418,25 @@ bool GamePlay::checkShipCrystal(MyVector2D t_shipLocation, MyVector2D t_crystalL
 		return false;
 	}
 	return true;
+}
+void GamePlay::setupText(sf::Text & t_text, std::string t_string, sf::Vector2f t_position)
+{
+	t_text.setFont(m_font);
+	t_text.setCharacterSize(24);
+	t_text.setString(t_string);
+	t_text.setFillColor(sf::Color::White);
+	t_text.setPosition(t_position);
+}
+void GamePlay::retrieveCargo()
+{
+	int index = 0;
+	int gemType= -1;
+	do
+	{
+		gemType = m_ship.getHoldItem(index++);
+		Game::s_gems[gemType]++;
+	} 
+	while (gemType != -1);
 }
 void GamePlay::newCrystal(MyVector2D t_location, int t_type)
 {

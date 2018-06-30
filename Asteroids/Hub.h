@@ -8,6 +8,7 @@ enum class
 	Map,
 	Market,
 	Help,
+	Exit,
 	None
 };
 
@@ -21,7 +22,7 @@ public:
 	void processEvents(sf::Event event);
 	void initialise(sf::Font & font);
 private:
-	void  setupText(sf::Text &text, std::string string, sf::Vector2f position);
+	void  setupText(sf::Text &text, std::string t_string, sf::Vector2f position);
 
 	sf::Texture m_backgroundTexture;
 	sf::Sprite m_backgroundSprite;
@@ -31,6 +32,8 @@ private:
 	sf::Text m_hangerText;
 	sf::Text m_marketText;
 	sf::Text m_helpText;
+	sf::Text m_exitText;
+	
 	
 };
 

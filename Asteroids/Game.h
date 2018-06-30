@@ -10,6 +10,7 @@
 #include "Help.h"
 #include "GamePlay.h"
 #include "Market.h"
+#include "Hanger.h"
 #include <string.h>
 
 const int NO_MINERALS = 5;
@@ -83,6 +84,7 @@ private:
 	Map m_map;
 	Help m_help;
 	Market m_market;
+	Hanger m_hanger;
 	
 	
 	sf::Font m_font; // nasa font

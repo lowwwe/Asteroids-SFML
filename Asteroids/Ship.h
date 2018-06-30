@@ -33,9 +33,10 @@ public:
 	bool m_alphaUp = true;
 	int m_sheildEnergy = 500;
 	int m_levels[4][4] = { { 1,2,3,4 },{ 25,15,7,3 },{ 3,5,7,10 },{ 4,3,2,1 } };
-	int m_currentLevels[4] = { 0,0,0,0 };
+	static int s_currentLevels[4];
 	int m_hold[MAX_HOLD_ITEMS];
 	void addToHold(int t_type);
+	int getHoldItem(int t_index);
 
 private:
 	sf::Texture m_shipTextures[2];
@@ -47,10 +48,10 @@ private:
 	sf::Texture m_gemsTexture;
 	sf::Sprite m_gemsSprite;
 	
-	MyVector2D m_velocity;
+	MyVector2D m_velocity; 
 	
 	float m_turnRate = 2.0f;
-	float m_accelarationRate = m_levels[ENGINE][m_currentLevels[ENGINE]];
+	int m_accelarationRate = m_levels[ENGINE][s_currentLevels[ENGINE]];
 
 	float m_maxSpeed;
 	float m_maxSpeedSquared = 25.0f;
@@ -58,7 +59,7 @@ private:
 	float m_engineFrameIncrement = 0.5f;
 	
 	int m_maxEngineFrame = 6;
-	int m_holdCapicity = m_levels[HOLD][m_currentLevels[HOLD]];
+	int m_holdCapicity = m_levels[HOLD][s_currentLevels[HOLD]];
 	int m_holdCurrentCount = 0;
 	void screenWrap();
 	void engineFrame();
