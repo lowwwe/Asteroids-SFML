@@ -19,6 +19,8 @@ void Crystal::render(sf::RenderWindow & t_window)
 	if (m_active)
 	{
 		t_window.draw(m_crystalSprite);
+		dot.setPosition(m_location);		
+		t_window.draw(dot);
 	}
 }
 

@@ -14,6 +14,7 @@
 #include <string.h>
 
 const int NO_MINERALS = 5;
+const int MAX_PLANETS = 9;
 
 struct Planet
 {
@@ -36,7 +37,8 @@ enum class
 	Pause, 
 	Game, 
 	Help, 
-	Over };
+	Over,
+	Exit };
 enum class
 	EngineState {
 	Drift,

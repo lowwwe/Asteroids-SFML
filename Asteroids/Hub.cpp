@@ -94,6 +94,8 @@ void Hub::processEvents(sf::Event event)
 		case HubRegion::Help:
 			Game::s_currentGameState = GameState::Help;
 			break;		
+		case HubRegion::Exit:
+			Game::s_currentGameState = GameState::Exit;
 		}
 	}
 }

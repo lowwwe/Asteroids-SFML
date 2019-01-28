@@ -250,6 +250,7 @@ void GamePlay::setupLevel(int t_levelNo)
 	{
 		m_asteroids[i].reStart(i);
 	}
+	m_currentLevel = t_levelNo;
 	// add pirates
 	// do crystals
 	// do explosions
@@ -431,12 +432,26 @@ void GamePlay::retrieveCargo()
 {
 	int index = 0;
 	int gemType= -1;
+	bool clearedLevel = true;
 	do
 	{
 		gemType = m_ship.getHoldItem(index++);
 		Game::s_gems[gemType]++;
 	} 
 	while (gemType != -1);
+	
+	for (int i = 0; i < m_currentLevel; i++)
+	{
+		if (m_asteroids[i].m_active)
+		{
+			clearedLevel = false;
+		}
+	}
+	if (m_currentLevel < MAX_PLANETS -1 && clearedLevel)
+	{
+		Game::g_planets[m_currentLevel + 1].active = true;	
+	}
+
 }
 void GamePlay::newCrystal(MyVector2D t_location, int t_type)
 {

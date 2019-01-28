@@ -6,10 +6,10 @@ GameState Game::s_currentGameState = GameState::Logo;
 Music Game::s_music = Music::Menu;
 GamePlay Game::s_gameplay;
 Planet Game::g_planets[] = {
-	{ "Moon",{ 0.0, 0.1, 0.1, 0.0, 0.0 }, 0.9, sf::IntRect{ 534,41,30,25 } ,false },
+	{ "Moon",{ 0.0, 0.1, 0.1, 0.0, 0.0 }, 0.9, sf::IntRect{ 534,41,30,25 } ,true }, 
 	{ "Venus",{ 0.2, 0.2, 0.0, 0.0, 0.0 }, 0.1, sf::IntRect{ 250, 10, 30, 50 }, true },
 	{ "Mercury",{ 0.5, 0.1, 0.0, 0.0, 0.0 }, 0.5, sf::IntRect{ 280, 20, 80, 80 } , true },
-	{ "Earth",{ 0.15, 0.15, 0.15, 0.4, 0.0 }, 0.2, sf::IntRect{ 370, 45, 120, 90 }, true },
+	{ "Earth",{ 0.15, 0.15, 0.15, 0.4, 0.0 }, 0.2, sf::IntRect{ 370, 45, 120, 90 }, false },
 	{ "Mars",{ 0.1, 0.8, 0.0, 0.0, 0.0 }, 0.3, sf::IntRect{ 506, 130, 100, 60 }, false },
 	{ "Jupiter",{ 0.1, 0.1, 0.1, 0.1, 0.1 }, 0.4, sf::IntRect{ 530, 240, 200, 200 }, false },
 	{ "Saturn",{ 0.2, 0.2, 0.2, 0.2, 0.2 }, 0.8, sf::IntRect{ 406, 331, 150, 120 } , false },
@@ -184,6 +184,8 @@ void Game::update(sf::Time timeSlice)
 		break;
 	case GameState::Over:
 		break;
+	case GameState::Exit:
+		m_window.close();
 	default:
 		break;
 	}

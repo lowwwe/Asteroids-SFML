@@ -36,7 +36,7 @@ private:
 	Bullet m_bullets[MAX_BULLETS];
 	Explosion m_explosions[MAX_EXPLOSIONS];
 	Crystal m_crystals[MAX_CRYSTALS];
-	sf::SoundBuffer m_laserSoundBuffer;
+	sf::SoundBuffer m_laserSoundBuffer;  
 	sf::Sound m_laserSound;
 	sf::SoundBuffer m_enemyLaserSoundBuffer;
 	sf::Sound m_enemyLaserSound;
@@ -57,6 +57,7 @@ private:
 	bool m_shipAccelerate{ false };
 	bool m_fire{ false };
 	int m_pauseOption{ 0 };
+	int m_currentLevel; 
 
 	void fireBullet();
 	void collisions();
