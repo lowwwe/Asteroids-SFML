@@ -22,6 +22,7 @@ public:
 	static sf::Texture s_dustTexture;
 	sf::Sprite m_explosionSprite;
 	int m_frame;
+	int m_frameSize;
 	bool m_active = false;
 
 };

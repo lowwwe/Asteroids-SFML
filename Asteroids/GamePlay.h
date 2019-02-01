@@ -9,7 +9,7 @@
 #include "Crystal.h"
 
 const int MAX_ASTEROIDS = 20;
-const int MAX_EXPLOSIONS = 2;
+const int MAX_EXPLOSIONS = 5;
 const int MAX_CRYSTALS = 10;
 const int RESUME = 1;
 const int RETURN = 2;
@@ -23,8 +23,10 @@ public:
 	~GamePlay();
 	void render(sf::RenderWindow &t_window);
 	void pauseRender(sf::RenderWindow &t_window);
+	void gameoverRender(sf::RenderWindow &t_window);
 	void update(sf::Time t_deltaTime);
 	void pauseUpdate(sf::Time t_deltaTime);
+	void overUpdate(sf::Time t_deltaTime);
 	void processEvents(sf::Event t_event);
 	void pauseProcessEvents(sf::Event t_event);
 	void initialise(sf::Font & t_font);
@@ -49,6 +51,7 @@ private:
 	sf::Text m_pausePromptText;
 	sf::Text m_resumeText;
 	sf::Text m_returnToBaseText;
+	sf::Text m_gameOverText;
 	sf::Font m_font; 
 
 
@@ -58,9 +61,11 @@ private:
 	bool m_fire{ false };
 	int m_pauseOption{ 0 };
 	int m_currentLevel; 
+	int m_gameOverCounter;
 
 	void fireBullet();
 	void collisions();
+	bool checkShipAsteroid(MyVector2D t_shipLocation, Asteroid &t_asteroid);
 	bool checkBulletAsteroid(Bullet &t_bullet, Asteroid &t_asteroid);
 	void newExplosion(MyVector2D t_location, animation t_type);
 	void newCrystal(MyVector2D t_location, int t_type);
@@ -68,6 +73,8 @@ private:
 	bool checkShipCrystal(MyVector2D t_shipLocation, MyVector2D t_crystalLocation);
 	void setupText(sf::Text & t_text, std::string t_string, sf::Vector2f t_position);
 	void retrieveCargo();
+	void destroyAsteroid(Asteroid &t_asteroid);
+	void damageShip();
 	
 };
 

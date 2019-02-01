@@ -80,6 +80,12 @@ void GamePlay::pauseRender(sf::RenderWindow & t_window)
 	t_window.draw(m_returnToBaseText);
 }
 
+void GamePlay::gameoverRender(sf::RenderWindow & t_window)
+{
+	render(t_window);
+	t_window.draw(m_gameOverText);	
+}
+
 void GamePlay::update(sf::Time t_deltaTime)
 {
 	if (m_shipTrunRight)
@@ -122,6 +128,30 @@ void GamePlay::update(sf::Time t_deltaTime)
 
 void GamePlay::pauseUpdate(sf::Time t_deltaTime)
 {
+}
+
+void GamePlay::overUpdate(sf::Time t_deltaTime)
+{
+	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
+	{
+		m_asteroids[i].update(t_deltaTime);
+	}
+	for (size_t i = 0; i < MAX_BULLETS; i++)
+	{
+		m_bullets[i].update(t_deltaTime);
+	}
+	for (int i = 0; i < MAX_EXPLOSIONS; i++)
+	{
+		m_explosions[i].update(t_deltaTime);
+	}
+	for (int i = 0; i < MAX_CRYSTALS; i++)
+	{
+		m_crystals[i].update(t_deltaTime);
+	}
+	if (m_gameOverCounter-- < 0)
+	{
+		Game::s_currentGameState = GameState::Hub;
+	}
 }
 
 void GamePlay::processEvents(sf::Event t_event)
@@ -234,7 +264,8 @@ void GamePlay::initialise(sf::Font & t_font)
 	setupText(m_pausePromptText, "Game Paused", sf::Vector2f{ 280.0f, 200.0f });
 	m_pausePromptText.setCharacterSize(32);
 	setupText(m_resumeText, "Resume Game", sf::Vector2f{ 300.0f, 250.0f });
-	setupText(m_returnToBaseText, "Return to Base", sf::Vector2f{ 300.0f, 300.0f });		
+	setupText(m_returnToBaseText, "Return to Base", sf::Vector2f{ 300.0f, 300.0f });	
+	setupText(m_gameOverText, "Game Over !", sf::Vector2f{ 300.0f, 300.0f });
 }
 
 void GamePlay::setupLevel(int t_levelNo)
@@ -251,6 +282,7 @@ void GamePlay::setupLevel(int t_levelNo)
 		m_asteroids[i].reStart(i);
 	}
 	m_currentLevel = t_levelNo;
+	m_gameOverCounter = 300;
 	// add pirates
 	// do crystals
 	// do explosions
@@ -333,6 +365,87 @@ void GamePlay::collisions()
 			}
 		}
 	}
+	for (int j = 0; j < MAX_ASTEROIDS; j++)
+	{
+		if (m_asteroids[j].m_active)
+		{
+			if (checkShipAsteroid(m_ship.m_location, m_asteroids[j]))
+			{
+				destroyAsteroid(m_asteroids[j]);
+				damageShip();
+			}
+		}
+	}
+}
+
+void GamePlay::destroyAsteroid(Asteroid &t_asteroid)
+{
+	bool found = false;
+	int index = 0;
+	while (!found && index < MAX_ASTEROIDS)
+	{
+		if (!m_asteroids[index].m_active)
+		{
+			found = true;
+		}
+		else
+		{
+			index++;
+		}
+	}
+	if (found)
+	{
+		if (t_asteroid.reSize(m_ship.m_location, m_ship.m_velocity, m_asteroids[index]))
+		{
+			newExplosion(t_asteroid.m_location, animation::Dust);
+			newCrystal(t_asteroid.m_location, -1);
+		}
+		else
+		{
+			m_asteroidBreakSound.play();
+		}
+	}
+	else
+	{
+		t_asteroid.destroy();
+		newCrystal(t_asteroid.m_location, -1);
+	}
+}
+
+void GamePlay::damageShip()
+{
+	if (!m_ship.m_sheildOn)
+	{
+		Game::s_currentGameState = GameState::Over;
+		m_ship.m_active = false;
+		newExplosion(m_ship.m_location, animation::Explosion);
+	}
+}
+
+bool GamePlay::checkShipAsteroid(MyVector2D t_shipLocation, Asteroid & t_asteroid)
+{
+	float gap = Asteroid::s_sizes[t_asteroid.m_size] + 64.0f;
+	if (t_shipLocation.y < t_asteroid.m_location.y - gap)
+	{
+		return false;
+	}
+	if (t_shipLocation.y > t_asteroid.m_location.y + gap)
+	{
+		return false;
+	}
+	if (t_shipLocation.x < t_asteroid.m_location.x - gap)
+	{
+		return false;
+	}
+	if (t_shipLocation.x > t_asteroid.m_location.x + gap)
+	{
+		return false;
+	}
+	if ((t_asteroid.m_location - t_shipLocation).lengthSquared() > (gap * gap / 4))
+	{
+		return false;
+	}
+	return true;
 }
 
 bool GamePlay::checkBulletAsteroid(Bullet & t_bullet, Asteroid & t_asteroid)
@@ -395,7 +508,7 @@ int GamePlay::chooseCrystal()
 }
 bool GamePlay::checkShipCrystal(MyVector2D t_shipLocation, MyVector2D t_crystalLocation)
 {
-	const double touchingDistance = 48.0; //  64/2 + 32/2
+	const double touchingDistance = 40.0; //  64/2 + 32/2 - 8 {8 to ensure sprites touch}
 	const double touchingDistanceSquared = touchingDistance * touchingDistance;
 	MyVector2D gap = t_shipLocation - t_crystalLocation;
 	if (gap.x < -touchingDistance)

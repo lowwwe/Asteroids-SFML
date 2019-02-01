@@ -18,7 +18,7 @@ public:
 	Ship();
 	~Ship();
 	void render(sf::RenderWindow &t_window);
-	bool active = true;
+	bool m_active = true;
 	void reset();
 	void turnLeft();
 	void turnRight();
@@ -37,6 +37,7 @@ public:
 	int m_hold[MAX_HOLD_ITEMS];
 	void addToHold(int t_type);
 	int getHoldItem(int t_index);
+	MyVector2D m_velocity;
 
 private:
 	sf::Texture m_shipTextures[2];
@@ -48,7 +49,7 @@ private:
 	sf::Texture m_gemsTexture;
 	sf::Sprite m_gemsSprite;
 	
-	MyVector2D m_velocity; 
+	
 	
 	float m_turnRate = 2.0f;
 	int m_accelarationRate = m_levels[ENGINE][s_currentLevels[ENGINE]];

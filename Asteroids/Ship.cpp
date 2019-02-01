@@ -52,10 +52,19 @@ Ship::~Ship()
 
 void Ship::render(sf::RenderWindow & t_window)
 {
-	t_window.draw(m_shipSprite);
-	if (m_sheildOn)
+	if (m_active)
 	{
-		renderShield(t_window);
+		t_window.draw(m_shipSprite);
+#ifdef _DEBUG
+		sf::CircleShape dot{ 2.0f };
+		dot.setPosition(m_location);
+		t_window.draw(dot);
+#endif
+
+		if (m_sheildOn)
+		{
+			renderShield(t_window);
+		}
 	}
 	renderHold(t_window);
 }

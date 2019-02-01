@@ -16,11 +16,15 @@ Crystal::~Crystal()
 
 void Crystal::render(sf::RenderWindow & t_window)
 {
+	
 	if (m_active)
 	{
 		t_window.draw(m_crystalSprite);
-		dot.setPosition(m_location);		
+#ifdef _DEBUG
+		sf::CircleShape dot{ 2.0f };
+		dot.setPosition(m_location);
 		t_window.draw(dot);
+#endif
 	}
 }
 

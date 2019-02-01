@@ -13,7 +13,7 @@ public:
 	sf::Sprite m_crystalSprite;
 	bool m_active = false;
 
-	sf::CircleShape dot{ 2.0f };
+	
 
 	void render(sf::RenderWindow &t_window);
 	void update(sf::Time t_deltaTime);

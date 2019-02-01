@@ -6,7 +6,7 @@ int Asteroid::s_sizes[]={ 32,64,96,128 };
 
 Asteroid::Asteroid()
 {
-	dot.setFillColor(sf::Color::Red);
+	
 		if (!m_asteroidTexture[0].loadFromFile("assets\\images\\asteroid0.png"))
 		{
 			std::cout << "problem loading asteroid 0" << std::endl;
@@ -53,9 +53,12 @@ void Asteroid::render(sf::RenderWindow & t_window)
 {
 	if (m_active)
 	{
-		dot.setPosition(m_location);		
 		t_window.draw(m_asteroidSprite);
+#ifdef _DEBUG
+		sf::CircleShape dot{ 2.0f };
+		dot.setPosition(m_location);
 		t_window.draw(dot);
+#endif
 	}
 }
 
@@ -83,6 +86,33 @@ void Asteroid::reStart(int t_size)
 	m_asteroidSprite.setTexture(m_asteroidTexture[m_size],true);
 	m_asteroidSprite.setOrigin(static_cast<float>(s_sizes[m_size]/2), static_cast<float>(s_sizes[m_size]/2));
 	
+}
+
+bool Asteroid::reSize(MyVector2D t_pointOfImpact, MyVector2D t_vectorOfImpact, Asteroid t_newAsteroid)
+{
+	if (m_size == 0)
+	{
+		m_active = false;
+		return true;
+	}
+	else
+	{
+		m_size--;
+		double dotProduct = m_velocity.dot(t_vectorOfImpact);
+		MyVector2D newDirection = t_vectorOfImpact - m_velocity;
+		m_asteroidSprite.setTexture(m_asteroidTexture[m_size], true);
+		m_asteroidSprite.setOrigin(static_cast<float>(s_sizes[m_size] / 2), static_cast<float>(s_sizes[m_size] / 2));
+		if (dotProduct < 0)
+		{
+			t_newAsteroid.initialise(m_size, newDirection / 2, m_location);
+		}
+		else
+		{
+			t_newAsteroid.initialise(0, t_vectorOfImpact / 2, t_pointOfImpact);
+		}
+
+	}
+	return false;
 }
 
 bool Asteroid::reSize(Bullet & t_bullet, Asteroid t_newAsteroid)

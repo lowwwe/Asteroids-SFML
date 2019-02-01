@@ -183,6 +183,7 @@ void Game::update(sf::Time timeSlice)
 		m_help.update(timeSlice, m_window);
 		break;
 	case GameState::Over:
+		s_gameplay.overUpdate(timeSlice);
 		break;
 	case GameState::Exit:
 		m_window.close();
@@ -246,6 +247,7 @@ void Game::render()
 		m_help.render(m_window);
 		break;
 	case GameState::Over:
+		s_gameplay.gameoverRender(m_window);
 		break;
 	default:
 		break;
