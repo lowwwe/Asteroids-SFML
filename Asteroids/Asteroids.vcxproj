@@ -23,6 +23,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Contract.cpp" />
     <ClCompile Include="Crystal.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GamePlay.cpp" />
@@ -40,8 +41,10 @@
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="constants.h" />
     <ClInclude Include="Contract.h" />
     <ClInclude Include="Crystal.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GamePlay.h" />

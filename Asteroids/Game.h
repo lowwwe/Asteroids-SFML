@@ -12,6 +12,7 @@
 #include "Market.h"
 #include "Hanger.h"
 #include <string.h>
+#include "constants.h"
 
 const int NO_MINERALS = 5;
 const int MAX_PLANETS = 9;
@@ -39,11 +40,7 @@ enum class
 	Help, 
 	Over,
 	Exit };
-enum class
-	EngineState {
-	Drift,
-	Power, 
-	Turn };
+
 
 
 enum class

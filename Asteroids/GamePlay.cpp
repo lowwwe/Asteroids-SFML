@@ -51,6 +51,7 @@ GamePlay::~GamePlay()
 void GamePlay::render(sf::RenderWindow & t_window)
 {
 	m_ship.render(t_window);
+	m_PirateShip.render(t_window);
 	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
 	{
 		m_asteroids[i].render(t_window);
@@ -103,10 +104,14 @@ void GamePlay::update(sf::Time t_deltaTime)
 	}
 	if (m_fire)
 	{
-		fireBullet();
+		fireBullet(true);
 		m_fire = false;
 	}
 	m_ship.update(t_deltaTime);
+	if (m_PirateShip.update(t_deltaTime))
+	{
+		fireBullet(false);
+	}
 	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
 	{
 		m_asteroids[i].update(t_deltaTime);
@@ -152,6 +157,11 @@ void GamePlay::overUpdate(sf::Time t_deltaTime)
 	{
 		Game::s_currentGameState = GameState::Hub;
 	}
+	m_shipAccelerate = false;
+	m_engineSound.stop();
+	m_ship.m_enginePowerOn = false;
+	m_shipTrunLeft = false;
+	m_shipTrunRight = false;
 }
 
 void GamePlay::processEvents(sf::Event t_event)
@@ -326,7 +336,7 @@ void GamePlay::initialise(sf::Font & t_font)
 	m_pausePromptText.setCharacterSize(32);
 	setupText(m_resumeText, "Resume Game", sf::Vector2f{ 300.0f, 250.0f });
 	setupText(m_returnToBaseText, "Return to Base", sf::Vector2f{ 300.0f, 300.0f });	
-	setupText(m_gameOverText, "Game Over !", sf::Vector2f{ 300.0f, 300.0f });
+	setupText(m_gameOverText, "You Died !", sf::Vector2f{ 300.0f, 300.0f });
 }
 
 void GamePlay::setupLevel(int t_levelNo)
@@ -342,25 +352,51 @@ void GamePlay::setupLevel(int t_levelNo)
 	{
 		m_asteroids[i].reStart(i);
 	}
+	for (int i = 0; i < MAX_CRYSTALS; i++)
+	{
+		m_crystals[i].m_active = false;
+	}
 	m_currentLevel = t_levelNo;
 	m_gameOverCounter = 300;
 	// add pirates
+	double chance = rand()/ RAND_MAX;
+	if (chance < Game::g_planets[Game::s_currentPlanet].pirates)
+	{
+		m_PirateShip.reset();		
+	}
+	else
+	{
+		m_PirateShip.m_active = false;
+	}
 	// do crystals
 	// do explosions
 }
 
-void GamePlay::fireBullet()
+void GamePlay::fireBullet(bool t_friendly)
 {
 	int i{ 0 };
 	bool found{ false };
+	float heading{0.0};
+	MyVector2D location{ 0.0,0.0 };
+
+	if (t_friendly)
+	{
+		heading = m_ship.m_heading;
+		location = m_ship.m_location;
+	}
+	else
+	{
+		heading = m_PirateShip.m_heading;
+		location = m_PirateShip.m_location;
+	}
 	while( !found && i < MAX_BULLETS)
 	{
 		if (!m_bullets[i].m_alive)
 		{
 			found = true;
-			float xBit = std::cos(m_ship.m_heading /180.0f * PI_F);
-			float yBit = std::sin(m_ship.m_heading / 180.0f * PI_F);
-			m_bullets[i].reStart(1, m_ship.m_location, MyVector2D{ xBit,yBit }, m_ship.m_heading);			
+			float xBit = std::cos(heading /180.0f * PI_F);
+			float yBit = std::sin(heading / 180.0f * PI_F);
+			m_bullets[i].reStart(1, location, MyVector2D{ xBit,yBit }, heading, t_friendly);
 			m_laserSound.play();
 		}
 		++i;
@@ -373,6 +409,26 @@ void GamePlay::collisions()
 	{
 		if (m_bullets[i].m_alive)
 		{
+			if (m_bullets[i].m_friendly )
+			{
+				if (m_PirateShip.m_active)
+				{
+					if (checkBulletShip(m_PirateShip.m_location, m_bullets[i]))
+					{
+						m_bullets[i].m_alive = false;
+						damagePirateShip();
+					}
+				}
+			}
+			else
+			{
+				if (checkBulletShip(m_ship.m_location, m_bullets[i]))
+				{
+					m_bullets[i].m_alive = false;
+					damageShip();
+				}
+			}
+
 			for (int j = 0; j < MAX_ASTEROIDS; j++)
 			{
 				if (m_asteroids[j].m_active)
@@ -437,6 +493,80 @@ void GamePlay::collisions()
 			}
 		}
 	}
+	if (checkShipPirate())
+	{
+		damageShip();
+		damagePirateShip();
+	}
+}
+
+bool GamePlay::checkBulletShip(MyVector2D t_location,Bullet & t_bullet)
+{
+	float gap = 64.0f + 16.0f;
+	
+	if (t_bullet.m_location.y < t_location.y - gap)
+	{
+		return false;
+	}
+	if (t_bullet.m_location.y > t_location.y + gap)
+	{
+		return false;
+	}
+	if (t_bullet.m_location.x < t_location.x - gap)
+	{
+		return false;
+	}
+	if (t_bullet.m_location.x > t_location.x + gap)
+	{
+		return false;
+	}
+	if ((t_location - t_bullet.m_location).lengthSquared() > (gap * gap / 4))
+	{
+		return false;
+	}
+	return true;
+}
+
+bool GamePlay::checkShipPirate()
+{
+	float gap = 128.0f;
+	if (!m_PirateShip.m_active)
+	{
+		return false;
+	}
+	if (m_ship.m_location.y < m_PirateShip.m_location.y - gap)
+	{
+		return false;
+	}
+	if (m_ship.m_location.y > m_PirateShip.m_location.y + gap)
+	{
+		return false;
+	}
+	if (m_ship.m_location.x < m_PirateShip.m_location.x - gap)
+	{
+		return false;
+	}
+	if (m_ship.m_location.x > m_PirateShip.m_location.x + gap)
+	{
+		return false;
+	}
+	if ((m_PirateShip.m_location - m_ship.m_location).lengthSquared() > (gap * gap / 4))
+	{
+		return false;
+	}
+	return true;	
+}
+
+void GamePlay::damagePirateShip()
+{
+	if (!m_PirateShip.m_sheildOn)
+	{
+		
+		m_PirateShip.m_active = false;
+		newExplosion(m_PirateShip.m_location, animation::Explosion);
+		newCrystal(m_PirateShip.m_location, 5);
+		m_explosionSound.play();
+	}
 }
 
 void GamePlay::destroyAsteroid(Asteroid &t_asteroid)
@@ -480,6 +610,7 @@ void GamePlay::damageShip()
 		Game::s_currentGameState = GameState::Over;
 		m_ship.m_active = false;
 		newExplosion(m_ship.m_location, animation::Explosion);
+		m_explosionSound.play();
 	}
 }
 

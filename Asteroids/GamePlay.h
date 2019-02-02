@@ -7,11 +7,13 @@
 #include "Bullet.h"
 #include "Explosion.h"
 #include "Crystal.h"
+#include "Enemy.h"
 
 
 const int MAX_ASTEROIDS = 20;
 const int MAX_EXPLOSIONS = 5;
 const int MAX_CRYSTALS = 10;
+
 
 //const int RESUME = 1;
 //const int RETURN = 2;
@@ -44,6 +46,7 @@ private:
 	Asteroid m_asteroids[MAX_ASTEROIDS];
 	Bullet m_bullets[MAX_BULLETS];
 	Explosion m_explosions[MAX_EXPLOSIONS];
+	Enemy m_PirateShip;
 	Crystal m_crystals[MAX_CRYSTALS];
 	sf::SoundBuffer m_laserSoundBuffer;  
 	sf::Sound m_laserSound;
@@ -70,8 +73,11 @@ private:
 	int m_currentLevel; 
 	int m_gameOverCounter;
 
-	void fireBullet();
+	void fireBullet(bool t_friendly);
 	void collisions();
+	bool checkBulletShip(MyVector2D t_location, Bullet &t_bullet);
+	bool checkShipPirate();
+	void damagePirateShip();
 	bool checkShipAsteroid(MyVector2D t_shipLocation, Asteroid &t_asteroid);
 	bool checkBulletAsteroid(Bullet &t_bullet, Asteroid &t_asteroid);
 	void newExplosion(MyVector2D t_location, animation t_type);

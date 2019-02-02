@@ -2,14 +2,13 @@
 #define SHIP
 #include <SFML\Graphics.hpp>
 #include "MyVector2D.h"
+#include "constants.h"
 
-const float  PI_F = 3.14159265358979f; 
 const int ENGINE = 0; // Array index for ship parameters
 const int LASER = 1;
 const int HOLD = 2;
 const int REACTOR = 3;
-const float SLOW_FRICTION = 0.995f;
-const float FAST_FRICTION = 0.95f;
+
 const int MAX_HOLD_ITEMS = 10;
 
 class Ship
@@ -32,7 +31,7 @@ public:
 	float m_shieldAplha = 0;
 	bool m_alphaUp = true;
 	int m_sheildEnergy = 500;
-	int m_levels[4][4] = { { 1,2,3,4 },{ 25,15,7,3 },{ 3,5,7,10 },{ 4,3,2,1 } };
+	int m_levels[4][4] = { { 1,2,3,4 },{ 2,1,7,3 },{ 3,5,7,10 },{ 4,3,2,1 } };
 	static int s_currentLevels[4];
 	int m_hold[MAX_HOLD_ITEMS];
 	void addToHold(int t_type);

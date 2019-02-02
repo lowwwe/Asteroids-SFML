@@ -75,12 +75,16 @@ void Ship::reset()
 	m_location = MyVector2D{ 400.0 ,300.0 };
 	m_accelarationRate = m_levels[ENGINE][s_currentLevels[ENGINE]];
 	m_holdCapicity = m_levels[HOLD][s_currentLevels[HOLD]];
+	m_velocity = MyVector2D{ 0.0,0.0 };
+	m_heading = 0.0f;
+	m_enginePowerOn = false;
+	m_shipSprite.setRotation(m_heading + 90.0f);
 	for (int i = 0; i < m_holdCapicity; i++)
 	{
 		m_hold[i] = -1;
 		 
 	}
-
+ 
 }
 
 void Ship::turnLeft()

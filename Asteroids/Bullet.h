@@ -13,8 +13,9 @@ public:
 	~Bullet();
 	void render(sf::RenderWindow &t_window);
 	void update(sf::Time t_delta);
-	void reStart(int t_size, MyVector2D t_loaction, MyVector2D t_velocity, float t_heading);
+	void reStart(int t_size, MyVector2D t_loaction, MyVector2D t_velocity, float t_heading, bool t_friendly);
 	bool m_alive = false;
+	bool m_friendly = true;
 
 	MyVector2D m_location;
 	static sf::Texture s_bulletTexture;
