@@ -8,12 +8,19 @@
 #include "Explosion.h"
 #include "Crystal.h"
 
+
 const int MAX_ASTEROIDS = 20;
 const int MAX_EXPLOSIONS = 5;
 const int MAX_CRYSTALS = 10;
-const int RESUME = 1;
-const int RETURN = 2;
 
+//const int RESUME = 1;
+//const int RETURN = 2;
+enum class
+	PauseOption {
+	Resume,
+	Base,
+	None
+};
 
 
 class GamePlay
@@ -59,7 +66,7 @@ private:
 	bool m_shipTrunLeft{ false };
 	bool m_shipAccelerate{ false };
 	bool m_fire{ false };
-	int m_pauseOption{ 0 };
+	PauseOption m_pauseOption{ PauseOption::None};
 	int m_currentLevel; 
 	int m_gameOverCounter;
 

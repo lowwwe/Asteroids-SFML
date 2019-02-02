@@ -218,35 +218,43 @@ void GamePlay::pauseProcessEvents(sf::Event t_event)
 {
 	if (sf::Event::EventType::MouseMoved == t_event.type)
 	{
-		m_pauseOption = 0;
-		m_resumeText.setFillColor(sf::Color::White);
-		m_returnToBaseText.setFillColor(sf::Color::White);
+		m_pauseOption = PauseOption::None;
+	//	m_resumeText.setFillColor(sf::Color::White);
+//		m_returnToBaseText.setFillColor(sf::Color::White);
 		if (t_event.mouseMove.x > 300 && t_event.mouseMove.x < 500)
 		{
 			if (t_event.mouseMove.y > 250 && t_event.mouseMove.y < 300)
 			{
-				m_pauseOption = RESUME;
+				m_pauseOption = PauseOption::Resume;
 				m_resumeText.setFillColor(sf::Color::Yellow);
+				m_returnToBaseText.setFillColor(sf::Color::White);
 				
 			}
 			if (t_event.mouseMove.y > 300 && t_event.mouseMove.y < 350)
 			{
-				m_pauseOption = RETURN;
+				m_pauseOption = PauseOption::Base;
 				m_returnToBaseText.setFillColor(sf::Color::Yellow);
+				m_resumeText.setFillColor(sf::Color::White);
 			}			
 		}
 	}
 	if (sf::Event::EventType::MouseButtonReleased == t_event.type)
 	{
-		if (m_pauseOption == RESUME)
+		if (m_pauseOption == PauseOption::Resume)
 		{
 			Game::s_currentGameState = GameState::Game;
+			m_resumeText.setFillColor(sf::Color::White);
+			m_returnToBaseText.setFillColor(sf::Color::White);
+			m_pauseOption = PauseOption::None;
 		}
-		if (m_pauseOption == RETURN)
+		if (m_pauseOption == PauseOption::Base)
 		{
 			retrieveCargo();
 			Game::s_currentGameState = GameState::Hub;
 			Game::s_music = Music::Menu;
+			m_resumeText.setFillColor(sf::Color::White);
+			m_returnToBaseText.setFillColor(sf::Color::White);
+			m_pauseOption = PauseOption::None;
 		}
 	}
 	if (sf::Event::KeyReleased == t_event.type)
@@ -254,6 +262,59 @@ void GamePlay::pauseProcessEvents(sf::Event t_event)
 		if (sf::Keyboard::Escape == t_event.key.code)
 		{
 			Game::s_currentGameState = GameState::Game;
+		}
+	}
+	if (sf::Event::KeyPressed == t_event.type)
+	{
+		if (sf::Keyboard::Up == t_event.key.code)
+		{
+			if (m_pauseOption == PauseOption::Base)
+			{
+				m_pauseOption =PauseOption::Resume;
+				m_resumeText.setFillColor(sf::Color::Yellow);
+				m_returnToBaseText.setFillColor(sf::Color::White);
+			}
+			else
+			{
+				m_pauseOption = PauseOption::Base;
+				m_returnToBaseText.setFillColor(sf::Color::Yellow);
+				m_resumeText.setFillColor(sf::Color::White);
+			}
+		}
+		if (sf::Keyboard::Down == t_event.key.code)
+		{
+			if (m_pauseOption == PauseOption::Resume)
+			{
+				m_pauseOption = PauseOption::Base;
+				m_returnToBaseText.setFillColor(sf::Color::Yellow);
+				m_resumeText.setFillColor(sf::Color::White);
+			}
+			else
+			{
+				m_pauseOption =PauseOption::Resume;
+				m_resumeText.setFillColor(sf::Color::Yellow);
+				m_returnToBaseText.setFillColor(sf::Color::White);
+			}
+		}
+		if (sf::Keyboard::Return == t_event.key.code)
+		{
+			if (m_pauseOption == PauseOption::Resume)
+			{
+				Game::s_currentGameState = GameState::Game;
+				m_returnToBaseText.setFillColor(sf::Color::White);
+				m_resumeText.setFillColor(sf::Color::White);
+				m_pauseOption = PauseOption::None;
+
+			}
+			if (m_pauseOption == PauseOption::Base)
+			{
+				retrieveCargo();
+				Game::s_currentGameState = GameState::Hub;
+				Game::s_music = Music::Menu;
+				m_resumeText.setFillColor(sf::Color::White);
+				m_returnToBaseText.setFillColor(sf::Color::White);
+				m_pauseOption = PauseOption::None;
+			}
 		}
 	}
 }

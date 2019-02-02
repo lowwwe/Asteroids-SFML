@@ -45,11 +45,7 @@ enum class
 	Power, 
 	Turn };
 
-enum class 
-	PauseOption {
-	Resume, 
-	Base, 
-	None };
+
 enum class
 	Music {
 	Menu,

@@ -71,6 +71,7 @@ void Ship::render(sf::RenderWindow & t_window)
 
 void Ship::reset()
 {
+	m_active = true;
 	m_location = MyVector2D{ 400.0 ,300.0 };
 	m_accelarationRate = m_levels[ENGINE][s_currentLevels[ENGINE]];
 	m_holdCapicity = m_levels[HOLD][s_currentLevels[HOLD]];
@@ -79,6 +80,7 @@ void Ship::reset()
 		m_hold[i] = -1;
 		 
 	}
+
 }
 
 void Ship::turnLeft()
