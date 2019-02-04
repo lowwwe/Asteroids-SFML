@@ -2,6 +2,7 @@
 #define MARKET
 
 #include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 #include "Contract.h"
 const int MAX_CONTRACTS = 100;
 
@@ -26,6 +27,8 @@ private:
 	sf::Text m_titleText;
 	sf::Text m_valueText;
 	sf::Text m_holdingText;
+	sf::Sound m_completeSound;
+	sf::SoundBuffer m_completeSoundBuffer;
 	int m_marketSelection = -1;
 
 	Contract m_contracts[MAX_CONTRACTS];

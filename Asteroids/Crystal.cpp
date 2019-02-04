@@ -24,6 +24,12 @@ void Crystal::render(sf::RenderWindow & t_window)
 		sf::CircleShape dot{ 2.0f };
 		dot.setPosition(m_location);
 		t_window.draw(dot);
+		dot.setRadius(16);
+		dot.setPosition(m_location - sf::Vector2f{ 16.0f,16.0f});
+		dot.setFillColor(sf::Color::Transparent);
+		dot.setOutlineColor(sf::Color::Green);
+		dot.setOutlineThickness(1.0f);
+		t_window.draw(dot);
 #endif
 	}
 }

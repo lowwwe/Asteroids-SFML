@@ -31,11 +31,14 @@ public:
 	float m_shieldAplha = 0;
 	bool m_alphaUp = true;
 	int m_sheildEnergy = 500;
-	int m_levels[4][4] = { { 1,2,3,4 },{ 2,1,7,3 },{ 3,5,7,10 },{ 4,3,2,1 } };
+	float m_guageAngle = 0.0f;
+	float m_guageAngleDelta = 1.0f;
+	int m_levels[4][4] = { { 1,2,3,4 },{ 20,15,10,5 },{ 3,5,7,10 },{ 1,2,3,4  } };
 	static int s_currentLevels[4];
 	int m_hold[MAX_HOLD_ITEMS];
 	void addToHold(int t_type);
 	int getHoldItem(int t_index);
+	bool m_reloading;
 	MyVector2D m_velocity;
 
 private:
@@ -47,12 +50,19 @@ private:
 	sf::Sprite m_holdSprite;
 	sf::Texture m_gemsTexture;
 	sf::Sprite m_gemsSprite;
+	sf::Texture m_needleTexture;
+	sf::Sprite m_needleSprite;
+	sf::Texture m_gaugeTexture;
+	sf::Sprite m_gaugeSprite;
+	
 	
 	
 	
 	float m_turnRate = 2.0f;
 	int m_accelarationRate = m_levels[ENGINE][s_currentLevels[ENGINE]];
-
+	int m_reloadTime;
+	
+	int m_reloadDelay;
 	float m_maxSpeed;
 	float m_maxSpeedSquared = 25.0f;
 	float m_engineFrame = 0.0f;
@@ -66,6 +76,7 @@ private:
 	void shield();
 	void renderShield(sf::RenderWindow &t_window);
 	void renderHold(sf::RenderWindow &t_window);
+	void renderGauge(sf::RenderWindow &t_window);
 	
 
 };

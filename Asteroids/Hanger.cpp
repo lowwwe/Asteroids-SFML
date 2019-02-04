@@ -29,6 +29,7 @@ Hanger::Hanger()
 	m_gemsSprite.setTexture(m_gemsTexture);
 	m_gemsSprite.setTextureRect(sf::IntRect{ 160,0,32,32 });
 	m_gemsSprite.setPosition(sf::Vector2f{ OFFSET_LEVEL_X  , OFFSET_LEVEL_Y + 340.0f });
+	
 }
 
 
@@ -43,7 +44,7 @@ void Hanger::render(sf::RenderWindow & t_window)
 	t_window.draw(m_menuSprite);
 	t_window.draw(m_money);
 	t_window.draw(m_material);
-	t_window.draw(m_gemsSprite);
+	t_window.draw(m_gemsSprite);	
 	if (m_currentArea != ShipArea::None)
 	{
 		int current = static_cast<int>(m_currentArea);
@@ -93,7 +94,10 @@ void Hanger::render(sf::RenderWindow & t_window)
 			t_window.draw(m_costText[i]);
 			t_window.draw(m_metalText[i]);
 		}
-		
+		if (m_askForConfirmation)
+		{
+			t_window.draw(m_confirm);
+		}
 
 	}
 }
@@ -113,17 +117,27 @@ void Hanger::update(sf::Time t_deltaTime, sf::RenderWindow & t_window)
 			current = static_cast<int>(m_currentArea);
 		}
 	}
+	if (m_askForConfirmation && m_current != current)
+	{
+		m_askForConfirmation = false;
+	}
 	if (m_mouseClick && current != -1)
 	{
 		
 		if (Ship::s_currentLevels[current] < 3)
 		{
-			if ( !(Game::s_credits < m_upgradeCost[current][Ship::s_currentLevels[current] + 1]
-				|| Game::s_gems[5] < m_upgradeMaterial[current][Ship::s_currentLevels[current] + 1]))
+			int gems = Game::s_gems[5];
+			int gemesNeeeded = m_upgradeMaterial[current][Ship::s_currentLevels[current] + 1];
+			int credits = Game::s_credits;
+			int creditaNeeded = m_upgradeCost[current][Ship::s_currentLevels[current] + 1];
+			if ( !(Game::s_credits < m_upgradeCost[current][Ship::s_currentLevels[current] ]
+				|| Game::s_gems[5] < m_upgradeMaterial[current][Ship::s_currentLevels[current] ]))
 			{
-				Game::s_credits -= m_upgradeCost[current][Ship::s_currentLevels[current]];
-				Game::s_gems[5] -= m_upgradeMaterial[current][Ship::s_currentLevels[current]];
-				Ship::s_currentLevels[current]++;				
+				m_confirm.setString("Press return to \nconfirm purchase\nof " 
+					+ m_descriptors[current][Ship::s_currentLevels[current]] + " " 
+					+ m_names[current]);
+				m_askForConfirmation = true;	
+				m_current = current;
 			}
 		}
 	}
@@ -142,6 +156,16 @@ void Hanger::processEvents(sf::Event t_event)
 			Game::s_currentGameState = GameState::Hub;
 		}
 	}
+	if (m_askForConfirmation && sf::Event::KeyPressed == t_event.type)
+	{
+		if (sf::Keyboard::Return == t_event.key.code)
+		{
+			Game::s_credits -= m_upgradeCost[m_current][Ship::s_currentLevels[m_current]];
+			Game::s_gems[5] -= m_upgradeMaterial[m_current][Ship::s_currentLevels[m_current]];
+			Ship::s_currentLevels[m_current]++;
+			m_askForConfirmation = false;
+		}
+	}
 }
 
 void Hanger::initialise(sf::Font & t_font)
@@ -151,14 +175,15 @@ void Hanger::initialise(sf::Font & t_font)
 	setupText(m_optionText[0], 24, sf::Vector2f{ OFFSET_LEVEL_X, OFFSET_LEVEL_Y + 1 * INTERVAL_LEVEL_Y });
 	setupText(m_optionText[1], 24, sf::Vector2f{ OFFSET_LEVEL_X, OFFSET_LEVEL_Y + 2 * INTERVAL_LEVEL_Y });
 	setupText(m_optionText[2], 24, sf::Vector2f{ OFFSET_LEVEL_X, OFFSET_LEVEL_Y + 3 * INTERVAL_LEVEL_Y });
-	setupText(m_costText[0], 24, sf::Vector2f{ OFFSET_LEVEL_X + 170.0f, OFFSET_LEVEL_Y + 1 * INTERVAL_LEVEL_Y });
-	setupText(m_costText[1], 24, sf::Vector2f{ OFFSET_LEVEL_X + 170.0f, OFFSET_LEVEL_Y + 2 * INTERVAL_LEVEL_Y });
-	setupText(m_costText[2], 24, sf::Vector2f{ OFFSET_LEVEL_X + 170.0f, OFFSET_LEVEL_Y + 3 * INTERVAL_LEVEL_Y });
-	setupText(m_metalText[0], 24, sf::Vector2f{ OFFSET_LEVEL_X + 250.0f, OFFSET_LEVEL_Y + 1 * INTERVAL_LEVEL_Y });
-	setupText(m_metalText[1], 24, sf::Vector2f{ OFFSET_LEVEL_X + 250.0f, OFFSET_LEVEL_Y + 2 * INTERVAL_LEVEL_Y });
-	setupText(m_metalText[2], 24, sf::Vector2f{ OFFSET_LEVEL_X + 250.0f, OFFSET_LEVEL_Y + 3 * INTERVAL_LEVEL_Y });
+	setupText(m_costText[0], 24, sf::Vector2f{ OFFSET_LEVEL_X + 200.0f, OFFSET_LEVEL_Y + 1 * INTERVAL_LEVEL_Y });
+	setupText(m_costText[1], 24, sf::Vector2f{ OFFSET_LEVEL_X + 200.0f, OFFSET_LEVEL_Y + 2 * INTERVAL_LEVEL_Y });
+	setupText(m_costText[2], 24, sf::Vector2f{ OFFSET_LEVEL_X + 200.0f, OFFSET_LEVEL_Y + 3 * INTERVAL_LEVEL_Y });
+	setupText(m_metalText[0], 24, sf::Vector2f{ OFFSET_LEVEL_X + 280.0f, OFFSET_LEVEL_Y + 1 * INTERVAL_LEVEL_Y });
+	setupText(m_metalText[1], 24, sf::Vector2f{ OFFSET_LEVEL_X + 280.0f, OFFSET_LEVEL_Y + 2 * INTERVAL_LEVEL_Y });
+	setupText(m_metalText[2], 24, sf::Vector2f{ OFFSET_LEVEL_X + 280.0f, OFFSET_LEVEL_Y + 3 * INTERVAL_LEVEL_Y });
 	setupText(m_money, 24, sf::Vector2f{ OFFSET_LEVEL_X , OFFSET_LEVEL_Y + 300.0f});
 	setupText(m_material, 24, sf::Vector2f{ OFFSET_LEVEL_X + 40.0f , OFFSET_LEVEL_Y + 340.0f });
+	setupText(m_confirm, 24, sf::Vector2f{ 100.0f,40.0f });
 }
 
 void Hanger::setupText(sf::Text & text, int t_size, sf::Vector2f position)

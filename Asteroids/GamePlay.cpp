@@ -50,6 +50,7 @@ GamePlay::~GamePlay()
 
 void GamePlay::render(sf::RenderWindow & t_window)
 {
+	//t_window.draw(m_fuelLeft);
 	m_ship.render(t_window);
 	m_PirateShip.render(t_window);
 	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
@@ -68,7 +69,7 @@ void GamePlay::render(sf::RenderWindow & t_window)
 	{
 		m_explosions[i].render(t_window);
 	}
-
+	
 
 	
 }
@@ -97,17 +98,20 @@ void GamePlay::update(sf::Time t_deltaTime)
 	{
 		m_ship.turnLeft();
 	}
-	if (m_shipAccelerate)
+	if (m_shipAccelerate && m_ship.m_sheildEnergy > 0)
 	{
 		m_ship.accelerate();	
+		m_ship.m_sheildEnergy--;
 		m_ship.m_enginePowerOn = true;
 	}
-	if (m_fire)
+	if (m_fire & !m_ship.m_reloading)
 	{
 		fireBullet(true);
 		m_fire = false;
+		m_ship.m_reloading = true;
 	}
 	m_ship.update(t_deltaTime);
+	m_fuelLeft.setString(std::to_string(m_ship.m_sheildEnergy));
 	if (m_PirateShip.update(t_deltaTime))
 	{
 		fireBullet(false);
@@ -180,7 +184,7 @@ void GamePlay::processEvents(sf::Event t_event)
 		}
 		if (sf::Keyboard::Up == t_event.key.code || sf::Keyboard::W == t_event.key.code)
 		{
-			if (!m_shipAccelerate)
+			if (!m_shipAccelerate && m_ship.m_sheildEnergy > 0)
 			{
 				m_shipAccelerate = true;
 				m_engineSound.play();
@@ -337,11 +341,13 @@ void GamePlay::initialise(sf::Font & t_font)
 	setupText(m_resumeText, "Resume Game", sf::Vector2f{ 300.0f, 250.0f });
 	setupText(m_returnToBaseText, "Return to Base", sf::Vector2f{ 300.0f, 300.0f });	
 	setupText(m_gameOverText, "You Died !", sf::Vector2f{ 300.0f, 300.0f });
+	setupText(m_fuelLeft, "300", sf::Vector2f{ 675.0f,570.0f });
 }
 
 void GamePlay::setupLevel(int t_levelNo)
 {
 	m_ship.reset();
+	m_fuelLeft.setString(std::to_string(m_ship.m_sheildEnergy));
 	for (size_t i = 0; i < MAX_ASTEROIDS; i++)
 	{
 		m_asteroids[i].m_active = false;

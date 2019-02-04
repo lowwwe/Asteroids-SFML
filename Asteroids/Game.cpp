@@ -72,8 +72,8 @@ Game::Game() :
 	Game::s_gems[2] = 10;
 	Game::s_gems[3] = 10;
 	Game::s_gems[4] = 10;
-	Game::s_gems[5] = 2;
-	Game::s_credits = 10000;
+	Game::s_gems[5] = 12;
+	Game::s_credits = 40000;
 #endif // _DEBUG
 
 }

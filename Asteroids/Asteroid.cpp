@@ -58,6 +58,12 @@ void Asteroid::render(sf::RenderWindow & t_window)
 		sf::CircleShape dot{ 2.0f };
 		dot.setPosition(m_location);
 		t_window.draw(dot);
+		dot.setRadius(s_sizes[m_size]/2);
+		dot.setPosition(m_location + sf::Vector2f{ static_cast<float>(-s_sizes[m_size]/2) ,static_cast<float>(-s_sizes[m_size]/2 )});
+		dot.setFillColor(sf::Color::Transparent);
+		dot.setOutlineColor(sf::Color::Green);
+		dot.setOutlineThickness(1.0f);
+		t_window.draw(dot);
 #endif
 	}
 }

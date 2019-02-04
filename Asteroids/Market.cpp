@@ -128,6 +128,7 @@ void Market::processEvents(sf::Event t_event)
 						if (currentContract == m_marketSelection)
 						{
 							m_contracts[contractNo].complete();
+							m_completeSound.play();
 						}
 					}
 				}
@@ -155,6 +156,11 @@ void Market::initialise(sf::Font & t_font)
 	setupText(m_titleText, "Market", { 350,50 });
 	setupText(m_valueText, "", { 0,0 });
 	setupText(m_holdingText, "", { 0,0 });
+	if (!m_completeSoundBuffer.loadFromFile("assets\\audio\\printer.wav"))
+	{
+		std::cout << "problem loading laser sound" << std::endl;
+	}
+	m_completeSound.setBuffer(m_completeSoundBuffer);
 	
 }
 
@@ -170,17 +176,20 @@ void Market::setupText(sf::Text & t_text, std::string t_string, sf::Vector2f t_p
 
 void Market::setupContracts()
 {
+	int variation;
 	for (int i = 0; i < 10; i++)
 	{
-		m_contracts[i * 10 + 0].initialise(1, 2, 0, 0, 0, 1000);
+		variation = rand() % 2;
+		m_contracts[i * 10 + 0].initialise(1, 2, 0, variation, 0, 1000);
 		m_contracts[i * 10 + 1].initialise(1, 3, 0, 2, 0, 2000);
-		m_contracts[i * 10 + 2].initialise(0, 2, 2, 2, 0, 3000);
+		m_contracts[i * 10 + 2].initialise(0, variation, 2, 2, 0, 3000);
 		m_contracts[i * 10 + 3].initialise(1, 3, 0, 2, 0, 4000);
 		m_contracts[i * 10 + 4].initialise(1, 3, 0, 2, 0, 4000);
-		m_contracts[i * 10 + 5].initialise(0, 0, 3, 2, 3, 7000);
+		variation = rand() % 4;
+		m_contracts[i * 10 + 5].initialise(0, 0, 3, variation, 1, 7000);
 		m_contracts[i * 10 + 6].initialise(1, 3, 0, 0, 4, 8000);
 		m_contracts[i * 10 + 7].initialise(1, 0, 1, 0, 2, 4000);
-		m_contracts[i * 10 + 8].initialise(1, 0, 1, 0, 3, 4000);
-		m_contracts[i * 10 + 9].initialise(1, 1, 0, 0, 2, 2000);
+		m_contracts[i * 10 + 8].initialise(1, variation, 1, 0, 3, 6000);
+		m_contracts[i * 10 + 9].initialise(1, 1, 0, 0, variation, 2000);
 	}
 }

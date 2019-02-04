@@ -3,7 +3,7 @@
 
 
 
-int Ship::s_currentLevels[4] = { 1,2,0,0 };
+int Ship::s_currentLevels[4] = { 0,0,0,0 };
 
 Ship::Ship()
 {
@@ -42,6 +42,27 @@ Ship::Ship()
 		m_hold[i] = -1;
 	}
 
+	if (!m_gaugeTexture.loadFromFile("assets\\images\\gauge.png"))
+	{
+		std::cout << "problem loading gauge" << std::endl;
+	}
+	m_gaugeSprite.setTexture(m_gaugeTexture);
+	m_gaugeSprite.setPosition(620.0f, 480.0f);
+	if (!m_needleTexture.loadFromFile("assets\\images\\needle.png"))
+	{
+		std::cout << "problem loading needle" << std::endl;
+	}
+	m_needleSprite.setTexture(m_needleTexture);
+	m_needleSprite.setPosition(699.0f, 560.0f);
+	m_needleSprite.setOrigin(62.0f, 36.0f);
+
+#ifdef _DEBUG
+	Ship::s_currentLevels[0] = 0;
+	Ship::s_currentLevels[1] = 0;
+	Ship::s_currentLevels[2] = 0;
+	Ship::s_currentLevels[3] = 0;
+#endif // _DEBUG
+
 
 }
 
@@ -59,6 +80,12 @@ void Ship::render(sf::RenderWindow & t_window)
 		sf::CircleShape dot{ 2.0f };
 		dot.setPosition(m_location);
 		t_window.draw(dot);
+		dot.setRadius(32);
+		dot.setPosition(m_location - sf::Vector2f{ 32.0f,32.0f });
+		dot.setFillColor(sf::Color::Transparent);
+		dot.setOutlineColor(sf::Color::Green);
+		dot.setOutlineThickness(1.0f);
+		t_window.draw(dot);
 #endif
 
 		if (m_sheildOn)
@@ -67,6 +94,7 @@ void Ship::render(sf::RenderWindow & t_window)
 		}
 	}
 	renderHold(t_window);
+	renderGauge(t_window);
 }
 
 void Ship::reset()
@@ -74,8 +102,15 @@ void Ship::reset()
 	m_active = true;
 	m_location = MyVector2D{ 400.0 ,300.0 };
 	m_accelarationRate = m_levels[ENGINE][s_currentLevels[ENGINE]];
+	m_maxSpeed = static_cast<float>(5 + m_levels[ENGINE][s_currentLevels[ENGINE]]);
+	m_maxSpeedSquared = m_maxSpeed * m_maxSpeed;
 	m_holdCapicity = m_levels[HOLD][s_currentLevels[HOLD]];
+	m_turnRate = static_cast<float>(m_levels[HOLD][s_currentLevels[HOLD]]) / 2.0f;
+	m_sheildEnergy = 300 * m_levels[REACTOR][s_currentLevels[REACTOR]];
 	m_velocity = MyVector2D{ 0.0,0.0 };
+	m_reloading = false;
+	m_reloadTime = m_levels[LASER][s_currentLevels[LASER]];
+	m_reloadDelay = m_reloadTime;
 	m_heading = 0.0f;
 	m_enginePowerOn = false;
 	m_shipSprite.setRotation(m_heading + 90.0f);
@@ -84,6 +119,8 @@ void Ship::reset()
 		m_hold[i] = -1;
 		 
 	}
+	m_guageAngle = 240.0f;
+	m_guageAngleDelta = 240 / static_cast<float>(m_sheildEnergy);
  
 }
 
@@ -105,8 +142,10 @@ void Ship::accelerate()
 	MyVector2D trust{ cos(headingRadians),sin(headingRadians) };
 
 	trust.normalise();
-	trust = trust *  m_accelarationRate;
+	trust = trust *  (m_accelarationRate*m_accelarationRate ) / 2.0f;
 	m_velocity += trust;
+	m_guageAngle -= m_guageAngleDelta;
+	m_needleSprite.setRotation(m_guageAngle);
 	
 }
 
@@ -118,13 +157,18 @@ void Ship::update(sf::Time t_delta)
 	screenWrap();
 	engineFrame();
 	shield();
+	if (m_reloadDelay-- < 0)
+	{
+		m_reloading = false;
+		m_reloadDelay = m_reloadTime;
+	}
 }
 
 void Ship::friction()
 {	
-	if (m_velocity.lengthSquared() > m_maxSpeedSquared)
+	if (m_velocity.lengthSquared() > m_maxSpeedSquared*2)
 	{
-		m_velocity = m_velocity * (m_maxSpeedSquared / m_velocity.lengthSquared());
+		m_velocity = m_velocity * ((m_maxSpeedSquared*2) / m_velocity.lengthSquared());
 	}
 	if (m_velocity.lengthSquared() > 5.0)
 	{
@@ -184,7 +228,12 @@ void Ship::shield()
 		if (m_sheildEnergy-- < 0)
 		{
 			m_sheildOn = false;
+		}	
+		else
+		{
+			m_guageAngle -= m_guageAngleDelta;
 		}
+		m_needleSprite.setRotation(m_guageAngle);
 	}
 }
 
@@ -210,6 +259,7 @@ void Ship::renderShield(sf::RenderWindow & t_window)
 	m_shieldSprite.setColor(sf::Color{ 255,255,255,static_cast<sf::Uint8>(m_shieldAplha) });
 	t_window.draw(m_shieldSprite);
 	m_shieldSprite.rotate(0.05f);
+
 }
 
 void Ship::renderHold(sf::RenderWindow & t_window)
@@ -232,6 +282,17 @@ void Ship::renderHold(sf::RenderWindow & t_window)
 		}
 		holdOffsetX += 36.0f;
 	}
+}
+
+void Ship::renderGauge(sf::RenderWindow & t_window)
+{
+	sf::Uint8 red = 240u - static_cast<sf::Uint8>(m_guageAngle);
+	sf::Uint8 green = static_cast<sf::Uint8>(m_guageAngle);
+	sf::Uint8 blue = 0;
+	sf::Uint8 alpha = 255;
+	m_gaugeSprite.setColor(sf::Color(red, green, blue, alpha));
+	t_window.draw(m_gaugeSprite);
+	t_window.draw(m_needleSprite);
 }
 
 void Ship::addToHold(int t_type)

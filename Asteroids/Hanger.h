@@ -38,10 +38,13 @@ private:
 	sf::Texture m_gemsTexture;
 	sf::Sprite m_gemsSprite;
 	sf::Font m_font;
+	sf::Text m_confirm;
+	int m_current = -1;
+	bool m_askForConfirmation = false;
 	const float OFFSET_SHIP_X = 10.0f;
 	const float OFFSET_SHIP_Y = 30.0f;
 	const float OFFSET_LEVEL_Y = 70.0f;
-	const float OFFSET_LEVEL_X = 500.0f;
+	const float OFFSET_LEVEL_X = 450.0f;
 	const float INTERVAL_LEVEL_Y = 50.0F;
 	std::string m_names[4] = { "Engine", "Laser", "Hold", "Reactor" };
 	std::string m_descriptors[4][3] =
@@ -67,7 +70,7 @@ private:
 	};
 	int m_hoverAreas[4][4] =
 	{
-		{ 214, 316, 84, 48 },
+		{ 214, 316, 84, 84 },
 		{ 104, 43, 290, 106 },
 		{ 195, 192, 120, 140 },
 		{ 98, 330, 100, 73 }

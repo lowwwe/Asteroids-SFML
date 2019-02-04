@@ -63,6 +63,7 @@ private:
 	sf::Text m_returnToBaseText;
 	sf::Text m_gameOverText;
 	sf::Font m_font; 
+	sf::Text m_fuelLeft;
 
 
 	bool m_shipTrunRight{ false };
