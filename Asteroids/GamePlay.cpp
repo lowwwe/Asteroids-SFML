@@ -411,6 +411,10 @@ void GamePlay::fireBullet(bool t_friendly)
 
 void GamePlay::collisions()
 {
+#ifdef _DEBUG
+	m_ship.m_warning = sf::Color::Transparent;
+#endif // _DEBUG
+		
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
 		if (m_bullets[i].m_alive)
@@ -526,6 +530,9 @@ bool GamePlay::checkBulletShip(MyVector2D t_location,Bullet & t_bullet)
 	{
 		return false;
 	}
+#ifdef _DEBUG
+	m_ship.m_warning = sf::Color::Magenta;
+#endif // _DEBUG
 	if ((t_location - t_bullet.m_location).lengthSquared() > (gap * gap / 4))
 	{
 		return false;
@@ -556,6 +563,9 @@ bool GamePlay::checkShipPirate()
 	{
 		return false;
 	}
+#ifdef _DEBUG
+	m_ship.m_warning = sf::Color::Magenta;
+#endif // _DEBUG
 	if ((m_PirateShip.m_location - m_ship.m_location).lengthSquared() > (gap * gap / 4))
 	{
 		return false;
@@ -706,7 +716,7 @@ int GamePlay::chooseCrystal()
 }
 bool GamePlay::checkShipCrystal(MyVector2D t_shipLocation, MyVector2D t_crystalLocation)
 {
-	const double touchingDistance = 40.0; //  64/2 + 32/2 - 8 {8 to ensure sprites touch}
+	const double touchingDistance = 48.0; //  64/2 + 32/2 - 8 {8 to ensure sprites touch}
 	const double touchingDistanceSquared = touchingDistance * touchingDistance;
 	MyVector2D gap = t_shipLocation - t_crystalLocation;
 	if (gap.x < -touchingDistance)
@@ -725,6 +735,9 @@ bool GamePlay::checkShipCrystal(MyVector2D t_shipLocation, MyVector2D t_crystalL
 	{
 		return false;
 	}
+#ifdef _DEBUG
+	m_ship.m_warning = sf::Color::Blue;
+#endif // _DEBUG
 	if (gap.lengthSquared() < touchingDistanceSquared)
 	{
 		return false;

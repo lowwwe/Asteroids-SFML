@@ -1,6 +1,7 @@
 #include "Bullet.h"
 
 sf::Texture Bullet::s_bulletTexture;
+int Bullet::s_bulletLife = 180;
 
 Bullet::Bullet()
 {
@@ -46,7 +47,7 @@ void Bullet::reStart(int t_size, MyVector2D t_loaction, MyVector2D t_velocity, f
 	m_friendly = t_friendly;
 	m_location = t_loaction;
 	m_velocity = t_velocity *5.0f;
-	m_framesLeft = 240;
+	m_framesLeft = s_bulletLife;
 	m_bulletSprite.setRotation(t_heading + 90.0f);
 	m_bulletSprite.setPosition(m_location);
 	

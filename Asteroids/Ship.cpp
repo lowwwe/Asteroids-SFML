@@ -1,4 +1,5 @@
 #include "Ship.h"
+#include "Bullet.h"
 #include <iostream>
 
 
@@ -83,7 +84,7 @@ void Ship::render(sf::RenderWindow & t_window)
 		dot.setRadius(32);
 		dot.setPosition(m_location - sf::Vector2f{ 32.0f,32.0f });
 		dot.setFillColor(sf::Color::Transparent);
-		dot.setOutlineColor(sf::Color::Green);
+		dot.setOutlineColor(m_warning);
 		dot.setOutlineThickness(1.0f);
 		t_window.draw(dot);
 #endif
@@ -110,6 +111,7 @@ void Ship::reset()
 	m_velocity = MyVector2D{ 0.0,0.0 };
 	m_reloading = false;
 	m_reloadTime = m_levels[LASER][s_currentLevels[LASER]];
+	Bullet::s_bulletLife = 200 - s_currentLevels[LASER] * 30;
 	m_reloadDelay = m_reloadTime;
 	m_heading = 0.0f;
 	m_enginePowerOn = false;

@@ -5,7 +5,7 @@
 #include "MyVector2D.h"
 
 const int BULLET_SIZE = 16;
-const int MAX_BULLETS = 50;
+const int MAX_BULLETS = 100;
 class Bullet
 {
 public:
@@ -20,6 +20,7 @@ public:
 	MyVector2D m_location;
 	static sf::Texture s_bulletTexture;
 	MyVector2D m_velocity;
+	static int s_bulletLife;
 private:
 	void screenWrap();
 	int m_framesLeft = 180;

@@ -40,6 +40,7 @@ public:
 	int getHoldItem(int t_index);
 	bool m_reloading;
 	MyVector2D m_velocity;
+	sf::Color m_warning = sf::Color::Yellow;
 
 private:
 	sf::Texture m_shipTextures[2];
