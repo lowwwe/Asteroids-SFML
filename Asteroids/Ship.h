@@ -39,6 +39,8 @@ public:
 	void addToHold(int t_type);
 	int getHoldItem(int t_index);
 	bool m_reloading;
+	bool m_hyperJump = true;
+	int m_hyperJumpTime = 60;
 	MyVector2D m_velocity;
 	sf::Color m_warning = sf::Color::Yellow;
 

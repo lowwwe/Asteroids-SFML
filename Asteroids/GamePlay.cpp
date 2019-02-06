@@ -199,6 +199,18 @@ void GamePlay::processEvents(sf::Event t_event)
 		{
 			m_ship.m_sheildOn = true;
 		}
+		if (sf::Keyboard::LAlt == t_event.key.code || sf::Keyboard::RAlt == t_event.key.code)
+		{
+			if (m_ship.m_sheildEnergy > 100 && !m_ship.m_hyperJump )
+			{
+				m_ship.m_sheildOn = true;
+				m_ship.m_hyperJump = true;
+				m_ship.m_hyperJumpTime = 60;
+				m_ship.m_sheildEnergy -= 100;
+				m_ship.m_location = MyVector2D{ static_cast<double>(std::rand() % 800),static_cast<double>(std::rand() % 600 )};
+				m_ship.m_guageAngle -= m_ship.m_guageAngleDelta * 100.0f;
+			}
+		}
 	}
 	if (sf::Event::KeyReleased == t_event.type)
 	{

@@ -110,7 +110,7 @@ void Help::initialise(sf::Font & t_font)
 {
 	m_font = t_font;
 	setupText(m_titleText, "Help", { 350,50 });
-	setupText(m_page1Text, "Use arrow keys to fly ship.\n<ctrl> to fire laser.\n<Alt> to hyperspace.\nShoot asteroids to find crystals\nUse tractor beam to collect.\nShoot Pirate to get scrap metal.\nFufill contracts to earn Space Credits.\nUpgrade ship to progress.", { 50,100 });
+	setupText(m_page1Text, "Use arrow keys to fly ship.\n<ctrl> to fire laser.\n<Alt> to hyperspace.\n<esc> to return to base.\nShoot asteroids to find crystals\nUse tractor beam to collect.\nShoot Pirate to get scrap metal.\nFufill contracts to earn Space Credits.\nUpgrade ship to progress.", { 50,100 });
 	setupText(m_page2Text, "Use mouse to select a Planet or moon.\nView crystal data.\nExpected Pirate activity.\nClick to explore.\nTo unlock new planets succecfully complete\na mission to the previous planet.", { 50,100 });
 	setupText(m_page3Text, "Available contracts displayed in white.\nSelect by clicking\nCredits added to your balance\nContracts with crystals you don't\nhave displayed in gray", { 50,100 });
 	setupText(m_page4Text, "Use mouse to select by clicking a part of \nthe ship to upgrade. \nCurrent level displayed in white. \nCost in metal and credits\nGrayed out entries currently unavailable\nLasers effects fire rate.\n Engine effects acceleration.\nReactor effects fuel level.\nHold effects turning rate.", { 50,100 });

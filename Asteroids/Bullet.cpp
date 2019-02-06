@@ -57,20 +57,26 @@ void Bullet::reStart(int t_size, MyVector2D t_loaction, MyVector2D t_velocity, f
 
 void Bullet::screenWrap()
 {
-	if (m_location.y < -BULLET_SIZE)
+	
+	int const OFFSET = 32; // ship radius
+	if (m_location.y < -OFFSET)
 	{
-		m_location.y = 640 + BULLET_SIZE;
+		
+		m_alive = false;
 	}
-	if (m_location.y  > 640 + BULLET_SIZE)
+	if (m_location.y  > 640 + OFFSET)
 	{
-		m_location.y = -BULLET_SIZE;
+	
+		m_alive = false;
 	}
-	if (m_location.x < -BULLET_SIZE)
+	if (m_location.x < -OFFSET)
 	{
-		m_location.x = 800 + BULLET_SIZE;
+		
+		m_alive = false;
 	}
-	if (m_location.x > 800 + BULLET_SIZE)
+	if (m_location.x > 800 + OFFSET)
 	{
-		m_location.x = -BULLET_SIZE;
+	
+		m_alive = false;
 	}
 }

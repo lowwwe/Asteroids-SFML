@@ -123,6 +123,8 @@ void Ship::reset()
 	}
 	m_guageAngle = 240.0f;
 	m_guageAngleDelta = 240 / static_cast<float>(m_sheildEnergy);
+	m_hyperJump = true;
+	m_hyperJumpTime = 60;
  
 }
 
@@ -158,6 +160,7 @@ void Ship::update(sf::Time t_delta)
 	friction();
 	screenWrap();
 	engineFrame();
+	
 	shield();
 	if (m_reloadDelay-- < 0)
 	{
@@ -225,18 +228,34 @@ void Ship::engineFrame()
 
 void Ship::shield()
 {
+	if (m_hyperJump)
+	{
+		m_sheildOn = true;
+	}
 	if (m_sheildOn)
 	{
-		if (m_sheildEnergy-- < 0)
+		if (!m_hyperJump)
 		{
-			m_sheildOn = false;
-		}	
+			if (m_sheildEnergy-- < 0)
+			{
+				m_sheildOn = false;
+			}
+			else
+			{
+				m_guageAngle -= m_guageAngleDelta;
+			}
+			
+		}
 		else
 		{
-			m_guageAngle -= m_guageAngleDelta;
+			if (m_hyperJumpTime-- < 0)
+			{
+				m_hyperJump = false;
+				m_sheildOn = false;
+			}			
 		}
-		m_needleSprite.setRotation(m_guageAngle);
 	}
+	m_needleSprite.setRotation(m_guageAngle);
 }
 
 void Ship::renderShield(sf::RenderWindow & t_window)
