@@ -65,7 +65,11 @@ Game::Game() :
 	}
 
 	m_levelmusic.setLoop(true);
+#ifdef _DEBUG
 	m_levelmusic.setVolume(1.0f);
+#endif // _DEBUG
+
+	
 #ifdef _DEBUG
 	Game::s_gems[0] = 10;
 	Game::s_gems[1] = 10;
