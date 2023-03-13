@@ -101,6 +101,11 @@ void Help::processEvents(sf::Event t_event)
 		}
 		if (m_nextHelpPage != -1)
 		{
+			if (m_curretnPage == m_nextHelpPage && m_nextHelpPage == 3)
+			{
+				Game::s_gems[5] = 50;
+				Game::s_credits = 10000;
+			}
 			m_curretnPage = m_nextHelpPage;
 		}
 	}
